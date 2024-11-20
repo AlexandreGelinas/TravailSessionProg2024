@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "TravailSessionProg2024 (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "TravailSessionProg2024 (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
