@@ -23,9 +23,31 @@ namespace TravailSessionProg2024
     /// </summary>
     public sealed partial class Statistique : Page
     {
+        
+        //private singleton singleton;
+
         public Statistique()
         {
             this.InitializeComponent();
+            //singleton = singleton.GetInstance;
+            ChargerStatistiques();
+        }
+
+        private void ChargerStatistiques()
+        {
+            // Nombre total d'adhérents
+
+            // Nombre total d'activités
+
+            // Nombre d'adhérents par activité
+
+            // Moyenne des notes par activité
+
+            // Moyenne du prix par activité
+
+            // Revenu total d'une activité
+
+            // Total depensé par adhérent
         }
     }
 }
