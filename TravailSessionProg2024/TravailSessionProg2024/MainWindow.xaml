@@ -8,15 +8,15 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <NavigationView x:Name="nvSample" IsSettingsVisible="False" IsBackButtonVisible="Collapsed" Loaded="nvSample_Loaded">
+    <NavigationView x:Name="nvSample" IsSettingsVisible="False" IsBackButtonVisible="Collapsed" Loaded="nvSample_Loaded" SelectionChanged="nvSample_SelectionChanged">
         <NavigationView.MenuItems>
             <NavigationViewItem Icon="Play" Content="Activités" Tag="Activites" />
         </NavigationView.MenuItems>
         <NavigationView.FooterMenuItems>
             <NavigationViewItem Content="Connexion" Tag="Connexion" Icon="Contact" /> <!--Le content va déprendre du niveau de permission, 0=Déco, 1=Adherent, 2=Admin-->
             <NavigationViewItem Content="Administrateur" Tag="Admin" Icon="Admin" Visibility="Collapsed"/>
-            <NavigationViewItem Content="Exportation de données" Tag="Export" Icon="ZoomOut" Visibility="Collapsed"/>
-            <NavigationViewItem Content="Statistique" Tag="Stats" Icon="ContactInfo" Visibility="Collapsed"/>
+            <NavigationViewItem Content="Exportation de données" Tag="Admin" Icon="ZoomOut" Visibility="Collapsed"/>
+            <NavigationViewItem Content="Statistique" Tag="Stats" Icon="Admin" Visibility="Collapsed"/>
         </NavigationView.FooterMenuItems>
 
         <Frame x:Name="contentFrame"/>
