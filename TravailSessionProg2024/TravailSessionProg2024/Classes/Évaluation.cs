@@ -8,5 +8,6 @@ namespace TravailSessionProg2024.Classes
 {
     internal class Évaluation
     {
+       
     }
 }
