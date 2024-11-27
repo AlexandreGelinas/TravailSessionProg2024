@@ -22,20 +22,20 @@
 //        //constructeur de la classe
 //        public Singleton()
 //        {
-//            liste = new ObservableCollection<Produit>(); 
+//            liste = new ObservableCollection<Produit>();
 //            listeRecherche = new ObservableCollection<Produit>();
 //            con = new MySqlConnection("Server=cours.cegep3r.info;Database=420345ri_gr00002_2375213-loucas-ferron;Uid=2375213;Pwd=2375213;");
 //        }
 
 //        public async void Ouverture()
 //        {
-//           liste.Clear();
+//            liste.Clear();
 //            MySqlCommand commande = new MySqlCommand();
 //            commande.Connection = con;
 //            commande.CommandText = "select * from Produit";
 //            con.Open();
 //            MySqlDataReader r = commande.ExecuteReader();
-  
+
 //            while (r.Read())
 //            {
 //                string nom = r["nom"].ToString();
@@ -118,7 +118,7 @@
 //            {
 //                if (nom.Equals(getProduit(ctr).Nom))
 //                {
-//                    return true;  
+//                    return true;
 //                }
 //            }
 
@@ -162,7 +162,7 @@
 //                commande.ExecuteNonQuery();
 
 //                con.Close();
-                
+
 //            }
 //            catch (Exception ex)
 //            {
@@ -197,7 +197,7 @@
 //                    }
 //                }
 
-                
+
 //            }
 
 //            r.Close();

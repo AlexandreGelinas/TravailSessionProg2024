@@ -8,7 +8,17 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-        <Button x:Name="myButton" Click="myButton_Click">Click Me</Button>
-    </StackPanel>
+    <NavigationView x:Name="nvSample" IsSettingsVisible="False" IsBackButtonVisible="Collapsed" Loaded="nvSample_Loaded">
+        <NavigationView.MenuItems>
+            <NavigationViewItem Icon="Play" Content="Activités" Tag="Activites" />
+        </NavigationView.MenuItems>
+        <NavigationView.FooterMenuItems>
+            <NavigationViewItem Content="Connexion" Tag="Connexion" Icon="Contact" /> <!--Le content va déprendre du niveau de permission, 0=Déco, 1=Adherent, 2=Admin-->
+            <NavigationViewItem Content="Administrateur" Tag="Admin" Icon="Admin" Visibility="Collapsed"/>
+            <NavigationViewItem Content="Exportation de données" Tag="Export" Icon="ZoomOut" Visibility="Collapsed"/>
+            <NavigationViewItem Content="Statistique" Tag="Stats" Icon="ContactInfo" Visibility="Collapsed"/>
+        </NavigationView.FooterMenuItems>
+
+        <Frame x:Name="contentFrame"/>
+    </NavigationView>
 </Window>
