@@ -9,7 +9,19 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid>
-        <TextBlock Text="rr"/>
-    </Grid>
+    <StackPanel>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top">
+            <Button x:Name="btn_login" Content="Connexion" Click="btn_login_Click" Background="OrangeRed"/>
+            <Button x:Name="btn_register" Content="Inscription" Click="btn_register_Click"/>
+        </StackPanel>
+
+        <StackPanel x:Name="login" HorizontalAlignment="Center" >
+            <TextBox Width="300" Header="Username" PlaceholderText="Enter your username"/>
+            <PasswordBox Width="300" Header="Password" PlaceholderText="Enter your password" PasswordChar="#" />
+        </StackPanel>
+
+        <StackPanel x:Name="register" Visibility="Collapsed" HorizontalAlignment="Center">
+
+        </StackPanel>
+    </StackPanel>
 </Page>

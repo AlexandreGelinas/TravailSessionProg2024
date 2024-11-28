@@ -1,3 +1,4 @@
+using Microsoft.UI;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
@@ -26,6 +27,22 @@ namespace TravailSessionProg2024
         public Connexion()
         {
             this.InitializeComponent();
+        }
+
+        private void btn_login_Click(object sender, RoutedEventArgs e)
+        {
+            login.Visibility = Visibility.Visible;
+            btn_register.Background = null;
+            btn_login.Background = new SolidColorBrush(Colors.OrangeRed);
+            register.Visibility = Visibility.Collapsed;
+        }
+
+        private void btn_register_Click(object sender, RoutedEventArgs e)
+        {
+            register.Visibility = Visibility.Visible;
+            btn_login.Background = null;
+            btn_register.Background = new SolidColorBrush(Colors.OrangeRed);
+            login.Visibility = Visibility.Collapsed;
         }
     }
 }

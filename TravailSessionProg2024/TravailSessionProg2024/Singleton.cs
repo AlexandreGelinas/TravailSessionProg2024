@@ -149,17 +149,27 @@ namespace TravailSessionProg2024
         public void Connexion() //FONCTION DE TEST
         {
             GestionWindow.mainWindow.admin_affichage();
+            niveau_permission = 2;
         }
 
         public void Connexion(Administrateur user)
         {
             GestionWindow.mainWindow.admin_affichage();
             administrateur_connecter = user;
+            niveau_permission = 2;
         }
 
         public void Connexion(Adhérent user)
         {
             adhérent_connecter = user;
+            niveau_permission = 1;
+        }
+
+        public void Déconnexion()
+        {
+            adhérent_connecter = null;
+            administrateur_connecter = null;
+            niveau_permission = 0 ;
         }
 
         //retourne l’instance du singleton

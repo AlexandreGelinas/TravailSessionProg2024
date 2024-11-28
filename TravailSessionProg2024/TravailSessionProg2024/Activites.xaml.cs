@@ -26,6 +26,8 @@ namespace TravailSessionProg2024
         public Activites()
         {
             this.InitializeComponent();
+            Singleton.getInstance().Ouverture();
+            lvActivités.ItemsSource = Singleton.getInstance().Getliste_Activités();
         }
 
         private void lvActivités_SelectionChanged(object sender, SelectionChangedEventArgs e)
