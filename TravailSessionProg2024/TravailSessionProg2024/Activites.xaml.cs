@@ -30,7 +30,7 @@ namespace TravailSessionProg2024
 
         private void lvActivités_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
+            // Pour pouvoir selectionner quelle activité s'inscrire??
         }
     }
 }

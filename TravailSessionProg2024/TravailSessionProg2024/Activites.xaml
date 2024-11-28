@@ -30,7 +30,7 @@
                     <StackPanel Orientation="Horizontal" Margin="5">
                         <TextBlock Text="{Binding Nom}" Width="250" Margin="5"/>
                         <TextBlock Text="{Binding Type}" Width="250" Margin="5"/>
-                        <TextBlock Text="{Binding CoutOrganisation}" Width="250" Margin="5"/>
+                        <TextBlock Text="{Binding PrixVenteParClient}" Width="250" Margin="5"/>
                     </StackPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>
