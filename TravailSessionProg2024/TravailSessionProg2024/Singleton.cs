@@ -174,5 +174,233 @@ namespace TravailSessionProg2024
         //    }
         //}
 
+        // Fonctions pour la page de statistiques ////////////////////////////////////
+
+        public int GetTotalAdherents()
+        {
+            try
+            {
+                MySqlCommand commande = new MySqlCommand("SELECT COUNT(*) FROM Adherents", con);
+                con.Open();
+                int count = Convert.ToInt32(commande.ExecuteScalar());
+                con.Close();
+                return count;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.ToString());
+                if (con.State == System.Data.ConnectionState.Open) con.Close();
+                return 0;
+            }
+        }
+
+        public int GetTotalActivites()
+        {
+            try
+            {
+                MySqlCommand commande = new MySqlCommand("SELECT COUNT(*) FROM Activites", con);
+                con.Open();
+                int count = Convert.ToInt32(commande.ExecuteScalar());
+                con.Close();
+                return count;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.ToString());
+                if (con.State == System.Data.ConnectionState.Open) con.Close();
+                return 0;
+            }
+        }
+
+        public Dictionary<string, int> GetAdherentsParActivite()
+        {
+            Dictionary<string, int> adherentsParActivite = new Dictionary<string, int>();
+            try
+            {
+                MySqlCommand commande = new MySqlCommand(@"
+                SELECT a.Nom, COUNT(p.idAdherent) AS NombreAdherents
+                FROM Activites a
+                JOIN Seances s ON a.ID = s.idActivite
+                JOIN Participations p ON s.ID = p.idSeance
+                GROUP BY a.Nom", con);
+
+                con.Open();
+                MySqlDataReader reader = commande.ExecuteReader();
+                while (reader.Read())
+                {
+                    string nomActivite = reader["Nom"].ToString();
+                    int count = Convert.ToInt32(reader["NombreAdherents"]);
+                    adherentsParActivite[nomActivite] = count;
+                }
+                reader.Close();
+                con.Close();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.ToString());
+                if (con.State == System.Data.ConnectionState.Open) con.Close();
+            }
+            return adherentsParActivite;
+        }
+
+        public Dictionary<string, double> GetMoyenneNotesParActivite()
+        {
+            Dictionary<string, double> moyenneNotes = new Dictionary<string, double>();
+            try
+            {
+                MySqlCommand commande = new MySqlCommand(@"
+                SELECT a.Nom, AVG(e.Note) AS MoyenneNote
+                FROM Activites a
+                JOIN Evaluations e ON a.ID = e.idActivite
+                GROUP BY a.Nom", con);
+
+                con.Open();
+                MySqlDataReader reader = commande.ExecuteReader();
+                while (reader.Read())
+                {
+                    string nomActivite = reader["Nom"].ToString();
+                    double moyenne = Convert.ToDouble(reader["MoyenneNote"]);
+                    moyenneNotes[nomActivite] = moyenne;
+                }
+                reader.Close();
+                con.Close();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.ToString());
+                if (con.State == System.Data.ConnectionState.Open) con.Close();
+            }
+            return moyenneNotes;
+        }
+
+        public Dictionary<string, decimal> GetRevenuTotalParActivite()
+        {
+            Dictionary<string, decimal> revenuParActivite = new Dictionary<string, decimal>();
+            try
+            {
+                MySqlCommand commande = new MySqlCommand(@"
+                SELECT a.Nom, SUM(p.NombrePlaces * a.PrixVenteParClient) AS RevenuTotal
+                FROM Activites a
+                JOIN Seances s ON a.ID = s.idActivite
+                JOIN Participations p ON s.ID = p.idSeance
+                GROUP BY a.Nom", con);
+
+                con.Open();
+                MySqlDataReader reader = commande.ExecuteReader();
+                while (reader.Read())
+                {
+                    string nomActivite = reader["Nom"].ToString();
+                    decimal revenu = Convert.ToDecimal(reader["RevenuTotal"]);
+                    revenuParActivite[nomActivite] = revenu;
+                }
+                reader.Close();
+                con.Close();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.ToString());
+                if (con.State == System.Data.ConnectionState.Open) con.Close();
+            }
+            return revenuParActivite;
+        }
+
+        public Dictionary<string, decimal> GetMoyennePrixParActivite()
+        {
+            Dictionary<string, decimal> moyennePrix = new Dictionary<string, decimal>();
+            try
+            {
+                MySqlCommand commande = new MySqlCommand(@"
+                SELECT Nom, AVG(PrixVenteParClient) AS PrixMoyen
+                FROM Activites
+                GROUP BY Nom", con);
+
+                con.Open();
+                MySqlDataReader reader = commande.ExecuteReader();
+                while (reader.Read())
+                {
+                    string nomActivite = reader["Nom"].ToString();
+                    decimal prixMoyen = Convert.ToDecimal(reader["PrixMoyen"]);
+                    moyennePrix[nomActivite] = prixMoyen;
+                }
+                reader.Close();
+                con.Close();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.ToString());
+                if (con.State == System.Data.ConnectionState.Open) con.Close();
+            }
+            return moyennePrix;
+        }
+
+        public decimal GetRevenuTotalPourToutesLesActivites()
+        {
+            try
+            {
+                MySqlCommand commande = new MySqlCommand(@"
+                SELECT SUM(s.NombrePlaces * a.PrixVenteParClient) AS RevenuTotal
+                FROM Seances s
+                JOIN Activites a ON s.idActivite = a.ID", con);
+
+                con.Open();
+                object result = commande.ExecuteScalar();
+                con.Close();
+
+                return result != DBNull.Value ? Convert.ToDecimal(result) : 0;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Erreur dans GetRevenuTotalPourToutesLesActivites: {ex.Message}");
+                if (con.State == System.Data.ConnectionState.Open) con.Close();
+                return 0;
+            }
+        }
+
+
+
+
+        public Dictionary<string, decimal> GetTotalDepenseParAdherent()
+        {
+            Dictionary<string, decimal> depenseParAdherent = new Dictionary<string, decimal>();
+            try
+            {
+                MySqlCommand commande = new MySqlCommand(@"
+                SELECT CONCAT(a.Nom, ' ', a.Prenom) AS NomComplet, SUM(act.PrixVenteParClient) AS TotalDepense
+                FROM Participations p
+                JOIN Seances s ON p.idSeance = s.ID
+                JOIN Activites act ON s.idActivite = act.ID
+                JOIN Adherents a ON p.idAdherent = a.ID
+                GROUP BY p.idAdherent", con);
+
+                con.Open();
+                MySqlDataReader reader = commande.ExecuteReader();
+                while (reader.Read())
+                {
+                    string nomAdherent = reader["NomComplet"].ToString();
+                    decimal totalDepense = Convert.ToDecimal(reader["TotalDepense"]);
+                    depenseParAdherent[nomAdherent] = totalDepense;
+                }
+                reader.Close();
+                con.Close();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.ToString());
+                if (con.State == System.Data.ConnectionState.Open) con.Close();
+            }
+            return depenseParAdherent;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
     }
 }

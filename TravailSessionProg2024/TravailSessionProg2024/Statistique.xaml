@@ -9,38 +9,80 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <StackPanel Padding="20" HorizontalAlignment="Center" Margin="20">
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+        <StackPanel Padding="20" HorizontalAlignment="Center" Margin="20">
 
-    <!-- Titre -->
-    <TextBlock Text="Statistiques des activités, des séances et des participants"
-           FontSize="20" FontWeight="Bold" Foreground="Gray" 
-           HorizontalAlignment="Center" Margin="20" />
+            <!-- Titre -->
+            <TextBlock Text="Statistiques des Activités, des Séances et des Participants"
+                       FontSize="24" FontWeight="Bold" Foreground="Gray" 
+                       HorizontalAlignment="Center" Margin="20" />
 
-    <Grid Margin="20">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="5" />
-            <ColumnDefinition Width="Auto" />
-        </Grid.ColumnDefinitions>
+            <Grid Margin="20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="0.5*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
 
-        <!-- Gauche -->
-        <StackPanel Grid.Column="0" HorizontalAlignment="Left">
-            <TextBlock x:Name="tblAdherentsTotal" FontSize="16" Margin="20" />
-            <TextBlock x:Name="tblActivitesTotal" FontSize="16" Margin="20" />
-            <TextBlock x:Name="tblAdherentsParActivites" FontSize="16" Margin="20" />
-            <TextBlock x:Name="tblMoyenneNotesActivites" FontSize="16" Margin="20" />
+                <!-- Gauche -->
+                <StackPanel Grid.Column="0" Spacing="10">
+
+                    <!-- Adhérents par Activité -->
+                    <TextBlock Text="Adhérents par activité" FontSize="18" FontWeight="SemiBold" />
+                    <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="5">
+                        <ScrollViewer Height="200">
+                            <ListView x:Name="tblAdherentsParActivites" FontSize="16" Foreground="Black" />
+                        </ScrollViewer>
+                    </Border>
+
+                    <!-- Moyenne des Notes par Activité -->
+                    <TextBlock Text="Moyenne des notes par activité" FontSize="18" FontWeight="SemiBold" />
+                    <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="5">
+                        <ScrollViewer Height="200" Margin="0">
+                            <ListView x:Name="tblMoyenneNotesActivites" FontSize="16" Foreground="Black" />
+                        </ScrollViewer>
+                    </Border>
+
+                    <!-- Nombre Total d'Adhérents -->
+                    <TextBlock Text="Nombre total d'adhérents" FontSize="18" FontWeight="SemiBold" />
+                    <TextBlock x:Name="tblAdherentsTotal" FontSize="16" Foreground="Black" />
+
+                    <!-- Nombre Total d'Activités -->
+                    <TextBlock Text="Nombre total d'activités" FontSize="18" FontWeight="SemiBold" />
+                    <TextBlock x:Name="tblActivitesTotal" FontSize="16" Foreground="Black" />
+
+                </StackPanel>
+
+                <!--Genre de ligne au milieu, rectangle pas tres large-->
+                <Rectangle Grid.Column="1" Fill="Gray" Width="2" VerticalAlignment="Stretch"  />
+
+                <!-- Droite -->
+                <StackPanel Grid.Column="2" Spacing="10">
+
+                    <!-- Prix Moyen par Activité -->
+                    <TextBlock Text="Prix moyen par activité" FontSize="18" FontWeight="SemiBold" />
+                    <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="5">
+                        <ScrollViewer Height="200">
+                            <ListView x:Name="tblPrixMoyenParActivites" FontSize="16" Foreground="Black" />
+                        </ScrollViewer>
+                    </Border>
+
+                    <!-- Total Dépensé par Adhérents -->
+                    <TextBlock Text="Total dépensé par adhérents" FontSize="18" FontWeight="SemiBold" />
+                    <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="5">
+                        <ScrollViewer Height="200">
+                            <ListView x:Name="tblTotalDepenseParAdherents" FontSize="16" Foreground="Black" />
+                        </ScrollViewer>
+                    </Border>
+
+                    <!-- Revenu Total par Activité -->
+                    <TextBlock Text="Revenu total des activités" FontSize="18" FontWeight="SemiBold" />
+                    <TextBlock x:Name="tblRevenuTotalActivites" FontSize="16" Foreground="Black" />
+
+
+                </StackPanel>
+            </Grid>
+
         </StackPanel>
-
-        <!-- Ligne Centrale -->
-        <Border Grid.Column="1" Background="Gray" Width="2" Margin="0,10" />
-
-        <!-- Droite -->
-        <StackPanel Grid.Column="2" HorizontalAlignment="Right">
-            <TextBlock x:Name="tblPrixMoyenParActivites" FontSize="16" Margin="20" />
-            <TextBlock x:Name="tblRevenuTotalActivites" FontSize="16" Margin="20" />
-            <TextBlock x:Name="tblTotalDepenseParAdherents" FontSize="16" Margin="20" />
-        </StackPanel>
-    </Grid>
-
-</StackPanel>
+    </ScrollViewer>
 </Page>

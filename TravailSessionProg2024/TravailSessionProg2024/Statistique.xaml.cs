@@ -23,31 +23,85 @@ namespace TravailSessionProg2024
     /// </summary>
     public sealed partial class Statistique : Page
     {
-        
-        //private singleton singleton;
+
+        private Singleton singleton;
 
         public Statistique()
         {
             this.InitializeComponent();
-            //singleton = singleton.GetInstance;
+            singleton = Singleton.getInstance();
             ChargerStatistiques();
         }
 
+        //private void ChargerStatistiques()
+        //{
+        // Nombre total d'adhérents
+
+        // Nombre total d'activités
+
+        // Nombre d'adhérents par activité
+
+        // Moyenne des notes par activité
+
+        // Moyenne du prix par activité
+
+        // Revenu total d'une activité
+
+        // Total depensé par adhérent
+        //}
+
         private void ChargerStatistiques()
         {
-            // Nombre total d'adhérents
+            try
+            {
+                // Nombre total d'adhérents
+                int totalAdherents = singleton.GetTotalAdherents();
+                tblAdherentsTotal.Text = $"Nombre total d'adhérents : {totalAdherents}";
 
-            // Nombre total d'activités
+                // Nombre total d'activités
+                int totalActivites = singleton.GetTotalActivites();
+                tblActivitesTotal.Text = $"Nombre total d'activités : {totalActivites}";
 
-            // Nombre d'adhérents par activité
+                // Adhérents par activité
+                var adherentsParActivite = singleton.GetAdherentsParActivite();
+                tblAdherentsParActivites.ItemsSource = adherentsParActivite
+                    .Select(x => $"{x.Key} : {x.Value} adhérents")
+                    .ToList();
 
-            // Moyenne des notes par activité
+                // Moyenne des notes par activité
+                var moyenneNotes = singleton.GetMoyenneNotesParActivite();
+                tblMoyenneNotesActivites.ItemsSource = moyenneNotes
+                    .Select(x => $"{x.Key} : {x.Value:F2} / 10")
+                    .ToList();
 
-            // Moyenne du prix par activité
+                // Moyenne des prix par activité
+                var moyennePrix = singleton.GetMoyennePrixParActivite();
+                tblPrixMoyenParActivites.ItemsSource = moyennePrix
+                    .Select(x => $"{x.Key} : {x.Value:C}")
+                    .ToList();
 
-            // Revenu total d'une activité
+                // Revenu total pour toutes les activités
+                decimal revenuTotal = singleton.GetRevenuTotalPourToutesLesActivites();
+                tblRevenuTotalActivites.Text = $"Revenu total des activités : {revenuTotal:C}";
 
-            // Total depensé par adhérent
+                // Total dépensé par chaque adhérent
+                var totalDepenseParAdherent = singleton.GetTotalDepenseParAdherent();
+                tblTotalDepenseParAdherents.ItemsSource = totalDepenseParAdherent
+                    .Select(x => $"{x.Key} : {x.Value:C}")
+                    .ToList();
+            }
+            catch (Exception ex)
+            {
+                // Gestion des erreurs
+                ContentDialog errorDialog = new ContentDialog
+                {
+                    Title = "Erreur",
+                    Content = $"Une erreur est survenue lors du chargement des statistiques : {ex.Message}",
+                    CloseButtonText = "OK"
+                };
+                errorDialog.ShowAsync();
+            }
         }
+
     }
 }
