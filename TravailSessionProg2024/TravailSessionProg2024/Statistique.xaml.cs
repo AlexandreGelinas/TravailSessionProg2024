@@ -33,23 +33,6 @@ namespace TravailSessionProg2024
             ChargerStatistiques();
         }
 
-        //private void ChargerStatistiques()
-        //{
-        // Nombre total d'adhérents
-
-        // Nombre total d'activités
-
-        // Nombre d'adhérents par activité
-
-        // Moyenne des notes par activité
-
-        // Moyenne du prix par activité
-
-        // Revenu total d'une activité
-
-        // Total depensé par adhérent
-        //}
-
         private void ChargerStatistiques()
         {
             try
