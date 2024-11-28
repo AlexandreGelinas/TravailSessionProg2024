@@ -9,7 +9,17 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid>
-        <TextBlock Text="RR"/>
-    </Grid>
+    <StackPanel>
+        <TextBlock Text="Liste des activités"
+                   FontSize="24"
+                   FontWeight="Bold"
+                   Foreground="Gray"
+                   HorizontalAlignment="Center"
+                   Margin="20"/>
+        
+        
+        
+    </StackPanel>
+    
+    
 </Page>
