@@ -27,5 +27,10 @@ namespace TravailSessionProg2024
         {
             this.InitializeComponent();
         }
+
+        private void lvActivités_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }
