@@ -10,13 +10,15 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.Media.Protection.PlayReady;
 using TravailSessionProg2024.Classes;
+using WinRT;
 
 namespace TravailSessionProg2024
 {
     internal class Singleton
     {
-        ObservableCollection<Adhérent> liste;
-        static Singleton instance = null;
+        ObservableCollection<Adhérent> liste_user;
+        ObservableCollection<Administrateur> liste_admin;
+        ObservableCollection<Activité> liste_activites; static Singleton instance = null;
         MySqlConnection con;
         int niveau_permission;
         Adhérent adhérent_connecter;
@@ -25,30 +27,123 @@ namespace TravailSessionProg2024
         //constructeur de la classe
         public Singleton()
         {
-            liste = new ObservableCollection<Adhérent>();
+            liste_user = new ObservableCollection<Adhérent>();
+            liste_admin = new ObservableCollection<Administrateur>();
+            liste_activites = new ObservableCollection<Activité>();
             con = new MySqlConnection("Server=cours.cegep3r.info;Database=a2024_420-345-ri_eq9;Uid=2375213;Pwd=2375213;");
         }
 
         public async void Ouverture()
         {
-            liste.Clear();
-            MySqlCommand commande = new MySqlCommand();
+            liste_user.Clear();
+            liste_admin.Clear();
+            liste_activites.Clear();
+            Ouverture_User();
+            Ouverture_Admin();
+            Ouverture_Activité();
+        }
+
+        public async void Ouverture_User()
+        {
+            try
+            {
+             MySqlCommand commande = new MySqlCommand();
             commande.Connection = con;
-            commande.CommandText = "select * from Adhérent";
+            commande.CommandText = "select * from adherents";
             con.Open();
             MySqlDataReader r = commande.ExecuteReader();
 
             while (r.Read())
             {
-                string nom = r["nom"].ToString();
-                string prix = r["prix"].ToString();
-                string categorie = r["categorie"].ToString();
+                string nom = r["Nom"].ToString();
+                string prenom = r["Prenom"].ToString();
+                string adresse = r["Adresse"].ToString();
+                DateOnly dateNaissance = DateOnly.Parse(r["DateNaissance"].ToString());
+                int age = int.Parse(r["Age"].ToString());
+                string mdp = r["MotDePasse"].ToString();
+                string codeAdherent = r["CodeAdherent"].ToString();
 
-                //ajouter(new Adhérent(nom, prix, categorie));
+                ajouter(new Adhérent(codeAdherent, mdp, prenom, nom, adresse, dateNaissance, age));
             }
 
             r.Close();
             con.Close();
+            }
+            catch (Exception ex)
+            {
+                if (con.State == System.Data.ConnectionState.Open)
+                {
+                    con.Close();
+                }
+                Debug.WriteLine(ex.Message);
+            }
+
+        }
+        public async void Ouverture_Admin()
+        {
+            try
+            {
+            MySqlCommand commande = new MySqlCommand();
+            commande.Connection = con;
+            commande.CommandText = "select * from adherents";
+            con.Open();
+            MySqlDataReader r = commande.ExecuteReader();
+
+            while (r.Read())
+            {
+                string nom = r["Nom"].ToString();
+                string prenom = r["Prenom"].ToString();
+                string mdp = r["MotDePasse"].ToString();
+                int id = int.Parse(r["ID"].ToString());
+
+                ajouter(new Administrateur(id, prenom, nom, mdp));
+            }
+
+            r.Close();
+            con.Close();
+            }
+            catch (Exception ex)
+            {
+                if (con.State == System.Data.ConnectionState.Open)
+                {
+                    con.Close();
+                }
+                Debug.WriteLine(ex.Message);
+            }
+
+        }
+        public async void Ouverture_Activité()
+        {
+            try
+            {
+                MySqlCommand commande = new MySqlCommand();
+                commande.Connection = con;
+                commande.CommandText = "select * from adherents";
+                con.Open();
+                MySqlDataReader r = commande.ExecuteReader();
+
+                while (r.Read())
+                {
+                    string nom = r["Nom"].ToString();
+                    string type = r["Type"].ToString();
+                    double coutOrganisation = double.Parse(r["CoutOrganisation"].ToString());
+                    double prixVenteParClient = double.Parse(r["PrixVenteParClient"].ToString());
+                    int id = int.Parse(r["ID"].ToString());
+
+                    ajouter(new Activité(nom, type, coutOrganisation, prixVenteParClient));
+                }
+
+                r.Close();
+                con.Close();
+            }
+            catch (Exception ex)
+            {
+                if (con.State == System.Data.ConnectionState.Open)
+                {
+                    con.Close();
+                }
+                Debug.WriteLine(ex.Message);
+            }
         }
 
         public void Connexion() //FONCTION DE TEST
@@ -76,103 +171,152 @@ namespace TravailSessionProg2024
             return instance;
         }
 
-        //retourne la liste des clients
-        public ObservableCollection<Adhérent> GetListeAdhérents()
+        //GET DES LISTES
+        public ObservableCollection<Adhérent> Getliste_Adhérents()
         {
             Ouverture();
-            return liste;
+            return liste_user;
+        }
+        public ObservableCollection<Administrateur> Getliste_Admin()
+        {
+            Ouverture();
+            return liste_admin;
+        }
+        public ObservableCollection<Activité> Getliste_Activités()
+        {
+            Ouverture();
+            return liste_activites;
         }
 
 
-        //retourne un client à une position précise
+        //GET OBJECTS
         public Adhérent getAdhérent(int position)
         {
-            return liste[position];
+            return liste_user[position];
+        }
+        public Administrateur GetAdministrateur(int position)
+        {
+            return liste_admin[position];
+        }
+        public Activité GetActivites(int position)
+        {
+            return liste_activites[position];
         }
 
 
-        //ajoute un client dans la liste
+        //AJOUTER
         public void ajouter(Adhérent Adhérent)
         {
-            liste.Add(Adhérent);
+            liste_user.Add(Adhérent);
+            BD_Ajouter(Adhérent);
         }
 
-
-        //modifie un client à une position précise
-        public void modifier(int position, Adhérent Adhérent)
+        public void ajouter(Administrateur admin)
         {
-            liste[position] = Adhérent;
+            liste_admin.Add(admin);
+        }
+        public void ajouter(Activité activité)
+        {
+            liste_activites.Add(activité);
         }
 
-        //supprime un client à une position précise
-        //public void supprimer(int position)
-        //{
-        //    BD_Supprimer(Singleton.getInstance().getAdhérent(position).Nom);
-        //    liste.RemoveAt(position);
-        //}
+
+        //SUPPRIMER
+        public void supprimerAdhérent(int position)
+        {
+            BD_Supprimer(Singleton.getInstance().getAdhérent(position));
+            liste_user.RemoveAt(position);
+        }
+        public void supprimerActivité(int position)
+        {
+            BD_Supprimer(Singleton.getInstance().GetActivites(position));
+            liste_user.RemoveAt(position);
+        }
 
 
-        //public bool verification(string nom)
-        //{
-        //    Ouverture();
-        //    for (int ctr = 0; ctr < liste.Count; ctr++)
-        //    {
-        //        if (nom.Equals(getAdhérent(ctr).Nom))
-        //        {
-        //            return true;
-        //        }
-        //    }
+        //VERIFICATION DE CODE
+        public bool verification(string codeAdherent)
+        {
+            Ouverture();
+            for (int ctr = 0; ctr < liste_user.Count; ctr++)
+            {
+                if (codeAdherent.Equals(getAdhérent(ctr).CodeAdherent))
+                {
+                    return true;
+                }
+            }
 
-        //    return false;
-        //}
+            return false;
+        }
 
-        //public void BD_Ajouter(Adhérent item)
-        //{
-        //    try
-        //    {
-        //        MySqlCommand commande = new MySqlCommand();
-        //        commande.Connection = con;
-        //        commande.CommandText = $"insert into Adhérent values(\"{item.Nom}\",\"{item.Prix}\",\"{item.Categorie}\")";
+        public void BD_Ajouter(Adhérent user)
+        {
+            try
+            {
+                MySqlCommand commande = new MySqlCommand();
+                commande.Connection = con;
+                commande.CommandText = $"insert into adherents (Nom, Prenom, Adresse, DateNaissance, Age, MotDePasse, CodeAdherent) values (\"{user.Nom}\", \"{user.Prenom}\", \"{user.Adresse}\", \"{user.DateNaissance}\", {user.Age}, \"{user.MotDePasse}\", \"{user.CodeAdherent}\")";
 
-        //        con.Open();
-        //        commande.ExecuteNonQuery();
+                con.Open();
+                commande.ExecuteNonQuery();
 
-        //        con.Close();
-        //        ajouter(item);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Debug.WriteLine(ex.ToString());
-        //        if (con.State == System.Data.ConnectionState.Open)
-        //        {
-        //            con.Close();
-        //        }
-        //    }
-        //}
+                con.Close();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.ToString());
+                if (con.State == System.Data.ConnectionState.Open)
+                {
+                    con.Close();
+                }
+            }
+        }
 
-        //public void BD_Supprimer(string nom)
-        //{
-        //    nom = nom.Replace("'", " ");
-        //    try
-        //    {
-        //        MySqlCommand commande = new MySqlCommand();
-        //        commande.Connection = con;
-        //        commande.CommandText = $"Delete from Adhérent WHERE REPLACE(nom, \"'\"  ,  \" \") = '{nom}'";
+        public void BD_Supprimer(Adhérent user)
+        {
+            try
+            {
+                MySqlCommand commande = new MySqlCommand();
+                commande.Connection = con;
+                commande.CommandText = $"Delete from adherents WHERE CodeAdherent = '{user.CodeAdherent}'";
 
-        //        con.Open();
-        //        commande.ExecuteNonQuery();
+                con.Open();
+                commande.ExecuteNonQuery();
 
-        //        con.Close();
+                con.Close();
 
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        if (con.State == System.Data.ConnectionState.Open)
-        //        {
-        //            con.Close();
-        //        }
-        //    }
-        //}
+            }
+            catch (Exception ex)
+            {
+                if (con.State == System.Data.ConnectionState.Open)
+                {
+                    con.Close();
+                }
+            }
+        }
+
+        public void BD_Supprimer(Activité activité)
+        {
+            try
+            {
+                MySqlCommand commande = new MySqlCommand();
+                commande.Connection = con;
+                commande.CommandText = $"Delete from activites WHERE Nom = '{activité.Nom}'";
+
+                con.Open();
+                commande.ExecuteNonQuery();
+
+                con.Close();
+
+            }
+            catch (Exception ex)
+            {
+                if (con.State == System.Data.ConnectionState.Open)
+                {
+                    con.Close();
+                }
+            }
+        }
 
         // Fonctions pour la page de statistiques ////////////////////////////////////
 
