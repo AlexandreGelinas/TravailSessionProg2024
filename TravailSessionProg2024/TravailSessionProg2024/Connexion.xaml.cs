@@ -44,5 +44,45 @@ namespace TravailSessionProg2024
             btn_register.Background = new SolidColorBrush(Colors.OrangeRed);
             login.Visibility = Visibility.Collapsed;
         }
+
+        private void submit_login_Click(object sender, RoutedEventArgs e)
+        {
+            if (Singleton.getInstance().Connexion(txtbox_login_username.Text, txtbox_login_mdp.Password))
+            {
+            login.Visibility=Visibility.Collapsed;
+            register.Visibility = Visibility.Collapsed;
+            stckpnl_btn_formulaire.Visibility = Visibility.Collapsed;
+            deconnect.Visibility = Visibility.Visible;
+                txtbox_login_mdp.Password = "";
+                txtbox_login_username.Text = "";
+            }
+            else
+            {
+                ToggleThemeTeachingTip1.IsOpen = true;
+                txtbox_login_mdp.Password = "";
+            }
+            
+        }
+
+        private void StackPanel_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (Singleton.getInstance().getNiveauPermission()==1 || Singleton.getInstance().getNiveauPermission() == 2)
+            {
+                login.Visibility = Visibility.Collapsed;
+                register.Visibility = Visibility.Collapsed;
+                stckpnl_btn_formulaire.Visibility = Visibility.Collapsed;
+                deconnect.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void disconnect_Click(object sender, RoutedEventArgs e)
+        {
+            Singleton.getInstance().Déconnexion();
+            login.Visibility = Visibility.Visible;
+            stckpnl_btn_formulaire.Visibility = Visibility.Visible;
+            deconnect.Visibility = Visibility.Collapsed;
+            btn_register.Background = null;
+            btn_login.Background = new SolidColorBrush(Colors.OrangeRed);
+        }
     }
 }

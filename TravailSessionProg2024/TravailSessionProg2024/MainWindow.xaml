@@ -16,7 +16,7 @@
             <NavigationViewItem Content="Connexion" Tag="Connexion" Icon="Contact" /> <!--Le content va déprendre du niveau de permission, 0=Déco, 1=Adherent, 2=Admin-->
             <NavigationViewItem Content="Administrateur" Tag="Admin" Icon="Admin" Visibility="Collapsed"/>
             <NavigationViewItem Content="Exportation de données" Tag="Admin" Icon="ZoomOut" Visibility="Collapsed"/>
-            <NavigationViewItem Content="Statistique" Tag="Stats" Icon="Admin" Visibility="Collapsed"/>
+            <NavigationViewItem Content="Statistique" Tag="Admin" Icon="Admin" Visibility="Collapsed"/>
         </NavigationView.FooterMenuItems>
 
         <Frame x:Name="contentFrame"/>

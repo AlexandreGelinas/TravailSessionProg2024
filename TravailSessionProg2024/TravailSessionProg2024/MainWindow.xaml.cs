@@ -30,7 +30,6 @@ namespace TravailSessionProg2024
         {
             this.InitializeComponent();
             GestionWindow.mainWindow = this;
-            Singleton.getInstance().Connexion();
         }
 
         private void nvSample_Loaded(object sender, RoutedEventArgs e)
@@ -93,10 +92,24 @@ namespace TravailSessionProg2024
                 liste.Add(nvItem);
             }
 
-            foreach (NavigationViewItem nvi in liste)
+            if (Singleton.getInstance().getNiveauPermission() == 2)
             {
-                nvi.Visibility = Visibility.Visible;
+                foreach (NavigationViewItem nvi in liste)
+                {
+                    nvi.Visibility = Visibility.Visible;
+                }
             }
+            if (Singleton.getInstance().getNiveauPermission() == 1 || Singleton.getInstance().getNiveauPermission() == 0)
+            {
+                foreach (NavigationViewItem nvi in liste)
+                {
+                    if (string.Equals(nvi.Tag, "Admin")){
+                        nvi.Visibility = Visibility.Collapsed;
+                    }
+                    
+                }
+            }
+
         }
 
     }

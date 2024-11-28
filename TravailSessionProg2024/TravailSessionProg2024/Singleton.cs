@@ -85,7 +85,7 @@ namespace TravailSessionProg2024
             {
             MySqlCommand commande = new MySqlCommand();
             commande.Connection = con;
-            commande.CommandText = "select * from adherents";
+            commande.CommandText = "select * from Administrateurs";
             con.Open();
             MySqlDataReader r = commande.ExecuteReader();
 
@@ -118,7 +118,7 @@ namespace TravailSessionProg2024
             {
                 MySqlCommand commande = new MySqlCommand();
                 commande.Connection = con;
-                commande.CommandText = "select * from adherents";
+                commande.CommandText = "select * from activites";
                 con.Open();
                 MySqlDataReader r = commande.ExecuteReader();
 
@@ -152,17 +152,44 @@ namespace TravailSessionProg2024
             niveau_permission = 2;
         }
 
-        public void Connexion(Administrateur user)
+        public bool Connexion(string username, string mdp)
         {
-            GestionWindow.mainWindow.admin_affichage();
-            administrateur_connecter = user;
-            niveau_permission = 2;
-        }
+            Administrateur admin;
+            Adhérent adherent;
+            for (int ctr=0; ctr < liste_user.Count() + liste_admin.Count()-1; ctr++)
+            {
+                for (int i = 0; i < liste_user.Count(); i++)
+                {
+                    adherent = liste_user[i];
+                    if (string.Equals(adherent.Nom, username) && string.Equals(adherent.MotDePasse, mdp)){
+                        adhérent_connecter = adherent;
+                        niveau_permission = 1;
+                        administrateur_connecter = null;
+                        GestionWindow.mainWindow.admin_affichage();
+                        return true;
+                    }
+                }
+                for (int i = 0; i < liste_admin.Count(); i++)
+                {
+                    admin = liste_admin[i];
+                    if (string.Equals(admin.ID, int.Parse(username)) && string.Equals(admin.MotDePasse, mdp))
+                    {
+                        adhérent_connecter = null;
+                        niveau_permission = 2;
+                        administrateur_connecter = admin;
+                        GestionWindow.mainWindow.admin_affichage();
+                        return true;
+                    }
+                }
 
-        public void Connexion(Adhérent user)
-        {
-            adhérent_connecter = user;
-            niveau_permission = 1;
+            }
+
+            if (adhérent_connecter==null && administrateur_connecter == null)
+            {
+                niveau_permission=0;
+            }
+            return false;
+            
         }
 
         public void Déconnexion()
@@ -170,6 +197,7 @@ namespace TravailSessionProg2024
             adhérent_connecter = null;
             administrateur_connecter = null;
             niveau_permission = 0 ;
+            GestionWindow.mainWindow.admin_affichage();
         }
 
         //retourne l’instance du singleton
@@ -211,6 +239,18 @@ namespace TravailSessionProg2024
         public Activité GetActivites(int position)
         {
             return liste_activites[position];
+        }
+        public int getNiveauPermission()
+        {
+            return niveau_permission;
+        }
+        public Administrateur getAdminConnecter()
+        {
+            return administrateur_connecter;
+        }
+        public Adhérent getAdhérentConnecter()
+        {
+            return adhérent_connecter;
         }
 
 

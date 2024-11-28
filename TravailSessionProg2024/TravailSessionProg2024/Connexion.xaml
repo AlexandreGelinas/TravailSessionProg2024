@@ -9,19 +9,32 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <StackPanel>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top">
+    <StackPanel Loaded="StackPanel_Loaded">
+        <TeachingTip x:Name="ToggleThemeTeachingTip1"
+            Title="ERREUR"
+            Subtitle="Impossible de vous connecter. Si c'est une erreur, veuillez contacter l'administrateur du site.">
+            <TeachingTip.IconSource>
+                <SymbolIconSource Symbol="Admin" />
+            </TeachingTip.IconSource>
+        </TeachingTip>
+
+        <StackPanel x:Name="stckpnl_btn_formulaire" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top">
             <Button x:Name="btn_login" Content="Connexion" Click="btn_login_Click" Background="OrangeRed"/>
             <Button x:Name="btn_register" Content="Inscription" Click="btn_register_Click"/>
         </StackPanel>
 
         <StackPanel x:Name="login" HorizontalAlignment="Center" >
-            <TextBox Width="300" Header="Username" PlaceholderText="Enter your username"/>
-            <PasswordBox Width="300" Header="Password" PlaceholderText="Enter your password" PasswordChar="#" />
+            <TextBox Width="300" x:Name="txtbox_login_username" Header="Username" PlaceholderText="Enter your username"/>
+            <PasswordBox Width="300" x:Name="txtbox_login_mdp" Header="Password" PlaceholderText="Enter your password" PasswordChar="*" />
+            <Button x:Name="submit_login" Content="Se connecter" Click="submit_login_Click" HorizontalAlignment="Center" Margin="0 20 0 0"/>
         </StackPanel>
 
         <StackPanel x:Name="register" Visibility="Collapsed" HorizontalAlignment="Center">
+            <Button x:Name="submit_register" Content="S'inscrire" HorizontalAlignment="Center" Margin="0 20 0 0"/>
+        </StackPanel>
 
+        <StackPanel x:Name="deconnect" Visibility="Collapsed" HorizontalAlignment="Center">
+            <Button x:Name="disconnect" Content="Se déconnecter" HorizontalAlignment="Center" Margin="0 20 0 0" Background="Red" Click="disconnect_Click"/>
         </StackPanel>
     </StackPanel>
 </Page>
