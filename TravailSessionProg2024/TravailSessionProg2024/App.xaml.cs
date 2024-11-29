@@ -1,34 +1,17 @@
 ﻿using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
-using Microsoft.UI.Xaml.Data;
-using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
-using Microsoft.UI.Xaml.Navigation;
-using Microsoft.UI.Xaml.Shapes;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.ApplicationModel;
-using Windows.ApplicationModel.Activation;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-
-// To learn more about WinUI, the WinUI project structure,
-// and more about our project templates, see: http://aka.ms/winui-project-info.
 
 namespace TravailSessionProg2024
 {
     /// <summary>
-    /// Provides application-specific behavior to supplement the default Application class.
+    /// Fournit un comportement spécifique à l'application pour compléter la classe Application par défaut.
     /// </summary>
     public partial class App : Application
     {
+        // Propriété pour référencer la fenêtre principale
+        public static Window MainWindow { get; private set; }
+
         /// <summary>
-        /// Initializes the singleton application object.  This is the first line of authored code
-        /// executed, and as such is the logical equivalent of main() or WinMain().
+        /// Initialise l'application.
         /// </summary>
         public App()
         {
@@ -36,15 +19,13 @@ namespace TravailSessionProg2024
         }
 
         /// <summary>
-        /// Invoked when the application is launched.
+        /// Méthode appelée lorsque l'application est lancée.
         /// </summary>
-        /// <param name="args">Details about the launch request and process.</param>
+        /// <param name="args">Détails concernant la demande de lancement et le processus.</param>
         protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
         {
-            m_window = new MainWindow();
-            m_window.Activate();
+            MainWindow = new MainWindow();
+            MainWindow.Activate();
         }
-
-        private Window m_window;
     }
 }

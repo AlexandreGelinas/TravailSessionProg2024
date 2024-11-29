@@ -45,7 +45,7 @@
             </ListView.ItemTemplate>
         </ListView>
 
-        <!-- Boutons d'inscription et de suppression -->
+        <!-- Boutons d'inscription et de suppression d'activité -->
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
             <!-- Bouton pour s'inscrire -->
             <Button Content="S'inscrire"

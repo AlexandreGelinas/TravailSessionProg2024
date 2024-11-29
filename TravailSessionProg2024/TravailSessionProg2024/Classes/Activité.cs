@@ -22,11 +22,13 @@ namespace TravailSessionProg2024.Classes
             PrixVenteParClient = prixVenteParClient;
         }
 
+        // Retourne une ligne de string pour CSV
         public override string ToString()
         {
-            return $"Nom: {Nom}, Type: {Type}, Cout d'organisation: {CoutOrganisation}" +
-                $" Prix de l'activité: {PrixVenteParClient}";
+            return $"{Nom};{Type};{CoutOrganisation};{PrixVenteParClient}";
         }
+
+        
 
         public string PrixAffiche // Pour afficher un $ à coté de chaque prix dans la ListeView
         {

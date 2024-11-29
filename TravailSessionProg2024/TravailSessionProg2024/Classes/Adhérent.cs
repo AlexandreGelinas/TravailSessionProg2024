@@ -28,10 +28,12 @@ namespace TravailSessionProg2024.Classes
             Age = age;
         }
 
+
+        //Pour importation CSV
         public override string ToString() {
 
-            return $"Code adhérent: {CodeAdherent}, Mot de passe: {MotDePasse}, Prenom: {Prenom}, Nom: {Nom}, Age: {Age}, Adresse: {Adresse}, Date de naissance:" +
-                $" {DateNaissance}";
+            return $"{Prenom};{Nom};{Adresse};{DateNaissance};{Age};{CodeAdherent};{MotDePasse}";
+                
 
         }
     }
