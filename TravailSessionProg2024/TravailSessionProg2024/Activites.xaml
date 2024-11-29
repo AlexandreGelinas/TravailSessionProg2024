@@ -38,12 +38,33 @@
                     <StackPanel Orientation="Horizontal" Margin="5">
                         <TextBlock Text="{Binding Nom}" Width="250" Margin="5"/>
                         <TextBlock Text="{Binding Type}" Width="250" Margin="5"/>
-                        <!--Modification du binding pour afficher le $ à coté du prix-->
-                        <TextBlock Text="{Binding PrixAffiche}" Width="250" Margin="5"/> 
+                        <!-- Modification du binding pour afficher le $ à coté du prix -->
+                        <TextBlock Text="{Binding PrixAffiche}" Width="250" Margin="5"/>
                     </StackPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+
+        <!-- Boutons d'inscription et de suppression -->
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
+            <!-- Bouton pour s'inscrire -->
+            <Button Content="S'inscrire"
+                    Width="150"
+                    Height="40"
+                    Margin="5"
+                    Click="Btn_inscription_Click"
+                    Background="Green"
+                    Foreground="White"/>
+
+            <!-- Bouton pour supprimer -->
+            <Button Content="Supprimer"
+                    Width="150"
+                    Height="40"
+                    Margin="5"
+                    Click="Btn_supprimer_Click"
+                    Background="Red"
+                    Foreground="White"/>
+        </StackPanel>
 
     </StackPanel>
 

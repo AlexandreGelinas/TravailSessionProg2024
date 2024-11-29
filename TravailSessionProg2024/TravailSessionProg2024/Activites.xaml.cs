@@ -34,5 +34,15 @@ namespace TravailSessionProg2024
         {
             // Pour pouvoir selectionner quelle activité s'inscrire??
         }
+
+        private void Btn_supprimer_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Btn_inscription_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
