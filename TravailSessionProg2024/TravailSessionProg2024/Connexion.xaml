@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <Page
     x:Class="TravailSessionProg2024.Connexion"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -9,32 +8,50 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <StackPanel Loaded="StackPanel_Loaded">
+    <StackPanel Loaded="StackPanel_Loaded" VerticalAlignment="Center" Spacing="20">
+
+        <!-- Titre de la page -->
+        <TextBlock Text="Page de connexion/inscription"
+           FontSize="30"
+           FontWeight="Bold"
+           Foreground="Gray"
+           HorizontalAlignment="Center"
+           Margin="20"/>
+
+        <!-- Affichage si erreur -->
         <TeachingTip x:Name="ToggleThemeTeachingTip1"
-            Title="ERREUR"
-            Subtitle="Impossible de vous connecter. Si c'est une erreur, veuillez contacter l'administrateur du site.">
+                     Title="Erreur"
+                     Subtitle="Impossible de vous connecter. Veuillez réessayer ou contacter l'administrateur."
+                     IsOpen="False"
+                     HorizontalAlignment="Center">
             <TeachingTip.IconSource>
-                <SymbolIconSource Symbol="Admin" />
+                <SymbolIconSource Symbol="Cancel" />
             </TeachingTip.IconSource>
         </TeachingTip>
 
-        <StackPanel x:Name="stckpnl_btn_formulaire" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top">
-            <Button x:Name="btn_login" Content="Connexion" Click="btn_login_Click" Background="OrangeRed"/>
-            <Button x:Name="btn_register" Content="Inscription" Click="btn_register_Click"/>
+        <!-- Buttons pour aller entre Connexion et Inscription -->
+        <StackPanel x:Name="stckpnl_btn_formulaire" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button x:Name="btn_login" Content="Connexion" Click="btn_login_Click" Background="OrangeRed" />
+            <Button x:Name="btn_register" Content="Inscription" Click="btn_register_Click" />
         </StackPanel>
 
-        <StackPanel x:Name="login" HorizontalAlignment="Center" >
-            <TextBox Width="300" x:Name="txtbox_login_username" Header="Username" PlaceholderText="Enter your username"/>
-            <PasswordBox Width="300" x:Name="txtbox_login_mdp" Header="Password" PlaceholderText="Enter your password" PasswordChar="*" />
-            <Button x:Name="submit_login" Content="Se connecter" Click="submit_login_Click" HorizontalAlignment="Center" Margin="0 20 0 0"/>
+        <!-- Formulaire de connexion -->
+        <StackPanel x:Name="login" HorizontalAlignment="Center" Visibility="Visible" Spacing="10">
+            <TextBox x:Name="txtbox_login_username" Width="300" Header="Nom d'utilisateur" PlaceholderText="Entrez votre nom d'utilisateur" />
+            <PasswordBox x:Name="txtbox_login_mdp" Width="300" Header="Mot de passe" PlaceholderText="Entrez votre mot de passe" />
+            <Button x:Name="submit_login" Content="Se connecter" Click="submit_login_Click" HorizontalAlignment="Center" />
         </StackPanel>
 
-        <StackPanel x:Name="register" Visibility="Collapsed" HorizontalAlignment="Center">
-            <Button x:Name="submit_register" Content="S'inscrire" HorizontalAlignment="Center" Margin="0 20 0 0"/>
+        <!-- Formulaire d'inscription -->
+        <StackPanel x:Name="register" HorizontalAlignment="Center" Visibility="Collapsed" Spacing="10">
+            <TextBox Width="300" Header="Nom d'utilisateur" PlaceholderText="Entrez votre nom d'utilisateur" />
+            <PasswordBox Width="300" Header="Mot de passe" PlaceholderText="Entrez votre mot de passe" />
+            <Button x:Name="submit_register" Content="S'inscrire" HorizontalAlignment="Center" />
         </StackPanel>
 
-        <StackPanel x:Name="deconnect" Visibility="Collapsed" HorizontalAlignment="Center">
-            <Button x:Name="disconnect" Content="Se déconnecter" HorizontalAlignment="Center" Margin="0 20 0 0" Background="Red" Click="disconnect_Click"/>
+        <!-- Bouton de déconnection -->
+        <StackPanel x:Name="deconnect" HorizontalAlignment="Center" Visibility="Collapsed">
+            <Button x:Name="disconnect" Content="Se déconnecter" Click="disconnect_Click" HorizontalAlignment="Center" Background="Red" />
         </StackPanel>
     </StackPanel>
 </Page>

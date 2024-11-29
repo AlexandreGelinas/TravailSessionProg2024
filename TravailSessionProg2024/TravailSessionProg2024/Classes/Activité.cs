@@ -27,5 +27,10 @@ namespace TravailSessionProg2024.Classes
             return $"Nom: {Nom}, Type: {Type}, Cout d'organisation: {CoutOrganisation}" +
                 $" Prix de l'activité: {PrixVenteParClient}";
         }
+
+        public string PrixAffiche // Pour afficher un $ à coté de chaque prix dans la ListeView
+        {
+            get { return $"{PrixVenteParClient:F2}$"; } 
+        }
     }
 }
