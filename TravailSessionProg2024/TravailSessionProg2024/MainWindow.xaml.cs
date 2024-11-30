@@ -109,7 +109,24 @@ namespace TravailSessionProg2024
                     
                 }
             }
+            changementNomConnexion();
+        }
 
+        public void changementNomConnexion()
+        {
+             NavigationViewItem nvi = (NavigationViewItem)nvSample.FooterMenuItems[0];
+            if (Singleton.getInstance().getNiveauPermission() == 0)
+            {
+                nvi.Content = "Connexion"; 
+            }
+            else if (Singleton.getInstance().getNiveauPermission() == 1)
+            {
+                nvi.Content = Singleton.getInstance().getAdhérentConnecter().Prenom;
+            }
+            else if (Singleton.getInstance().getNiveauPermission() == 2)
+            {
+                nvi.Content = Singleton.getInstance().getAdminConnecter().Prenom;
+            }
         }
 
         internal class MessageDialog

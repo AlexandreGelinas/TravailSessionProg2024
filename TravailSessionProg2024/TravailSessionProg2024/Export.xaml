@@ -11,6 +11,16 @@
 
     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="20">
 
+        <TeachingTip x:Name="teachtip"
+             Title="Notification"
+             Subtitle=""
+             IsOpen="False"
+             HorizontalAlignment="Center">
+            <TeachingTip.IconSource>
+                <SymbolIconSource Symbol="Cancel" />
+            </TeachingTip.IconSource>
+        </TeachingTip>
+
         <!-- Titre -->
         <TextBlock Text="Exportation de données"
                    FontSize="28"

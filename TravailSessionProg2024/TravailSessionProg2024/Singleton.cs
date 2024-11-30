@@ -58,7 +58,7 @@ namespace TravailSessionProg2024
                 string nom = r["Nom"].ToString();
                 string prenom = r["Prenom"].ToString();
                 string adresse = r["Adresse"].ToString();
-                DateOnly dateNaissance = DateOnly.Parse(r["DateNaissance"].ToString());
+                DateOnly dateNaissance = DateOnly.Parse(r["DateNaissance"].ToString().Substring(0,10));
                 int age = int.Parse(r["Age"].ToString());
                 string mdp = r["MotDePasse"].ToString();
                 string codeAdherent = r["CodeAdherent"].ToString();
@@ -156,12 +156,10 @@ namespace TravailSessionProg2024
         {
             Administrateur admin;
             Adhérent adherent;
-            for (int ctr=0; ctr < liste_user.Count() + liste_admin.Count()-1; ctr++)
-            {
                 for (int i = 0; i < liste_user.Count(); i++)
                 {
                     adherent = liste_user[i];
-                    if (string.Equals(adherent.Nom, username) && string.Equals(adherent.MotDePasse, mdp)){
+                    if (string.Equals(adherent.CodeAdherent, username) && string.Equals(adherent.MotDePasse, mdp)){
                         adhérent_connecter = adherent;
                         niveau_permission = 1;
                         administrateur_connecter = null;
@@ -171,18 +169,24 @@ namespace TravailSessionProg2024
                 }
                 for (int i = 0; i < liste_admin.Count(); i++)
                 {
-                    admin = liste_admin[i];
-                    if (string.Equals(admin.ID, int.Parse(username)) && string.Equals(admin.MotDePasse, mdp))
+                    try
                     {
+                        admin = liste_admin[i];
+                        if (string.Equals(admin.ID, int.Parse(username)) && string.Equals(admin.MotDePasse, mdp))
+                        {
                         adhérent_connecter = null;
                         niveau_permission = 2;
                         administrateur_connecter = admin;
                         GestionWindow.mainWindow.admin_affichage();
                         return true;
+                        }
                     }
+                    catch (System.FormatException ex) {
+                        niveau_permission = 0;
+                        break;
+                    }
+                    
                 }
-
-            }
 
             if (adhérent_connecter==null && administrateur_connecter == null)
             {
@@ -258,7 +262,6 @@ namespace TravailSessionProg2024
         public void ajouter(Adhérent Adhérent)
         {
             liste_user.Add(Adhérent);
-            BD_Ajouter(Adhérent);
         }
 
         public void ajouter(Administrateur admin)

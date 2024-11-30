@@ -8,6 +8,7 @@ using Microsoft.UI.Xaml.Navigation;
 using MySqlX.XDevAPI;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -41,38 +42,47 @@ namespace TravailSessionProg2024
             picker.SuggestedFileName = "activites";
             picker.FileTypeChoices.Add("Fichier texte", new List<string>() { ".csv" });
 
+            List<Activité> liste = new List<Activité>();
+            foreach (Activité act in Singleton.getInstance().Getliste_Activités())
+            {
+                liste.Add(act);
+            }
+
+            if (liste.Count == 0) //Vérification avant, car sinon on créer un fichier vide
+            {
+                teachtip.Content = "La liste des adhérents est vide. Rien à exporter.";
+                teachtip.IsOpen = true;
+                return;
+            }
+
             // Crée le fichier
             Windows.Storage.StorageFile monFichier = await picker.PickSaveFileAsync();
 
-            List<Activites> liste = new List<Activites>();
-    
-                
+            
 
             // Vérification et écriture
             try
             {
                 if (monFichier != null)
                 {
-                    if (liste.Count == 0)
-                    {
-                        await new Windows.UI.Popups.MessageDialog("La liste des activités est vide. Rien à exporter.").ShowAsync();
-                        return;
-                    }
 
                     var lignes = new List<string> { "Nom;Type;CoutOrganisation;PrixVenteParClient" }; // En-tête CSV
                     lignes.AddRange(liste.ConvertAll(x => x.ToString()));
 
                     await Windows.Storage.FileIO.WriteLinesAsync(monFichier, lignes, Windows.Storage.Streams.UnicodeEncoding.Utf8);
-                    await new Windows.UI.Popups.MessageDialog("Fichier exporté avec succès.").ShowAsync();
+                    teachtip.Content = "Fichier exporté avec succès.";
+                    teachtip.IsOpen = true;
                 }
                 else
                 {
-                    await new Windows.UI.Popups.MessageDialog("Exportation annulée.").ShowAsync();
+                    teachtip.Content = "Exportation annulée.";
+                    teachtip.IsOpen = true;
                 }
             }
             catch (Exception ex)
-            {   // Problème ici....
-                await new Windows.UI.Popups.MessageDialog($"Erreur lors de l'exportation : {ex.Message}").ShowAsync();
+            { 
+                teachtip.Content = $"Erreur lors de l'exportation : {ex.Message}";
+                teachtip.IsOpen = true;
             }
         }
 
@@ -81,44 +91,51 @@ namespace TravailSessionProg2024
         {
             var picker = new Windows.Storage.Pickers.FileSavePicker();
 
-            var hWnd = WinRT.Interop.WindowNative.GetWindowHandle(App.MainWindow);
+            var hWnd = WinRT.Interop.WindowNative.GetWindowHandle(GestionWindow.mainWindow);
             WinRT.Interop.InitializeWithWindow.Initialize(picker, hWnd);
 
             picker.SuggestedFileName = "adhérent";
             picker.FileTypeChoices.Add("Fichier texte", new List<string>() { ".csv" });
 
+            List<Adhérent> liste = new List<Adhérent>();
+            foreach (Adhérent adh in Singleton.getInstance().Getliste_Adhérents())
+            {
+                liste.Add(adh);
+            }
+
+            if (liste.Count == 0) //Vérification avant, car sinon on créer un fichier vide
+            {
+                teachtip.Content = "La liste des adhérents est vide. Rien à exporter.";
+                teachtip.IsOpen = true;
+                return;
+            }
+
             // Crée le fichier
             Windows.Storage.StorageFile monFichier = await picker.PickSaveFileAsync();
-
-            List<Adhérent> liste = new List<Adhérent>();
-
-
 
             // Vérification et écriture
             try
             {
                 if (monFichier != null)
                 {
-                    if (liste.Count == 0)
-                    {
-                        await new Windows.UI.Popups.MessageDialog("La liste des adhérents est vide. Rien à exporter.").ShowAsync();
-                        return;
-                    }
 
                     var lignes = new List<string> { "Prenom;Nom;Adresse;DateNaissance;Age;CodeAdherent;MotDePasse" }; // En-tête CSV
                     lignes.AddRange(liste.ConvertAll(x => x.ToString()));
 
                     await Windows.Storage.FileIO.WriteLinesAsync(monFichier, lignes, Windows.Storage.Streams.UnicodeEncoding.Utf8);
-                    await new Windows.UI.Popups.MessageDialog("Fichier exporté avec succès.").ShowAsync();
+                    teachtip.Content = "Fichier exporté avec succès.";
+                    teachtip.IsOpen = true;
                 }
                 else
                 {
-                    await new Windows.UI.Popups.MessageDialog("Exportation annulée.").ShowAsync();
+                    teachtip.Content = "Exportation annulée sans erreur.";
+                    teachtip.IsOpen = true;
                 }
             }
             catch (Exception ex)
-            {   // Problème ici....
-                await new Windows.UI.Popups.MessageDialog($"Erreur lors de l'exportation : {ex.Message}").ShowAsync();
+            {  
+                teachtip.Content = $"Erreur lors de l'exportation : {ex.Message}";
+                teachtip.IsOpen = true;
             }
 
         }
