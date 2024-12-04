@@ -8,17 +8,19 @@ namespace TravailSessionProg2024.Classes
 {
     internal class Séance
     {
+        public int IdActivité { get; set; }
         public DateTime DateHeure { get; set; }
         public int NombrePlaces { get; set; }
 
-        public Séance(DateTime dateHeure, int nombrePlaces )
+        public Séance(int idActivité, DateTime dateHeure, int nombrePlaces )
         {
+            IdActivité = idActivité;
             DateHeure = dateHeure;
             NombrePlaces = nombrePlaces;
         }
 
         public override string ToString() { 
-            return $"Date: {DateHeure}, Nombre de places: {NombrePlaces}";
+            return $"Id Activité: {IdActivité}, Date: {DateHeure}, Nombre de places: {NombrePlaces}";
         }
     }
 }

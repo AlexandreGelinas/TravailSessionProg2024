@@ -18,7 +18,9 @@ namespace TravailSessionProg2024
     {
         ObservableCollection<Adhérent> liste_user;
         ObservableCollection<Administrateur> liste_admin;
-        ObservableCollection<Activité> liste_activites; static Singleton instance = null;
+        ObservableCollection<Activité> liste_activites;
+        ObservableCollection<Séance> liste_seances;
+        static Singleton instance = null;
         MySqlConnection con;
         int niveau_permission;
         Adhérent adhérent_connecter;
@@ -30,6 +32,7 @@ namespace TravailSessionProg2024
             liste_user = new ObservableCollection<Adhérent>();
             liste_admin = new ObservableCollection<Administrateur>();
             liste_activites = new ObservableCollection<Activité>();
+            liste_seances = new ObservableCollection<Séance>();
             con = new MySqlConnection("Server=cours.cegep3r.info;Database=a2024_420-345-ri_eq9;Uid=2375213;Pwd=2375213;");
         }
 
@@ -131,6 +134,39 @@ namespace TravailSessionProg2024
                     int id = int.Parse(r["ID"].ToString());
 
                     ajouter(new Activité(nom, type, coutOrganisation, prixVenteParClient));
+                }
+
+                r.Close();
+                con.Close();
+            }
+            catch (Exception ex)
+            {
+                if (con.State == System.Data.ConnectionState.Open)
+                {
+                    con.Close();
+                }
+                Debug.WriteLine(ex.Message);
+            }
+        }
+
+        public async void Ouverture_Séance()
+        {
+            try
+            {
+                MySqlCommand commande = new MySqlCommand();
+                commande.Connection = con;
+                commande.CommandText = "select * from seances";
+                con.Open();
+                MySqlDataReader r = commande.ExecuteReader();
+
+                while (r.Read())
+                {
+                    
+                    int id = int.Parse(r["idActivite"].ToString());
+                    DateTime dateHeure = DateTime.Parse(r["DateHeure"].ToString());
+                    int nbPlace = int.Parse(r["NombrePlaces"].ToString());
+
+                    ajouter(new Séance(id, dateHeure, nbPlace));
                 }
 
                 r.Close();
@@ -271,6 +307,10 @@ namespace TravailSessionProg2024
         public void ajouter(Activité activité)
         {
             liste_activites.Add(activité);
+        }
+        public void ajouter(Séance séance)
+        {
+            liste_seances.Add(séance);
         }
 
 
