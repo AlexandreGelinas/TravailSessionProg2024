@@ -41,9 +41,11 @@ namespace TravailSessionProg2024
             liste_user.Clear();
             liste_admin.Clear();
             liste_activites.Clear();
+            liste_seances.Clear();
             Ouverture_User();
             Ouverture_Admin();
             Ouverture_Activité();
+            Ouverture_Séance();
         }
 
         public async void Ouverture_User()
