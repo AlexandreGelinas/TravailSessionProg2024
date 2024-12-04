@@ -8,12 +8,14 @@ namespace TravailSessionProg2024.Classes
 {
     internal class Séance
     {
+        public int ID { get; set; }
         public int IdActivité { get; set; }
         public DateTime DateHeure { get; set; }
         public int NombrePlaces { get; set; }
 
-        public Séance(int idActivité, DateTime dateHeure, int nombrePlaces )
+        public Séance(int id, int idActivité, DateTime dateHeure, int nombrePlaces )
         {
+            ID = id;
             IdActivité = idActivité;
             DateHeure = dateHeure;
             NombrePlaces = nombrePlaces;

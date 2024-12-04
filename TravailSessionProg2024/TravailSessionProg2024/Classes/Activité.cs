@@ -14,7 +14,7 @@ namespace TravailSessionProg2024.Classes
         public double PrixVenteParClient { get; set; }
 
 
-        public Activité(string nom, string type, double coutOrganisation, double prixVenteParClient)
+        public Activité (string nom, string type, double coutOrganisation, double prixVenteParClient)
         {
             Nom = nom;
             Type = type;

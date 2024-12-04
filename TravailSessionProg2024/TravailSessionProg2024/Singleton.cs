@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using Windows.Media.Protection.PlayReady;
 using TravailSessionProg2024.Classes;
 using WinRT;
+using Windows.System;
 
 namespace TravailSessionProg2024
 {
@@ -163,12 +164,12 @@ namespace TravailSessionProg2024
 
                 while (r.Read())
                 {
-                    
-                    int id = int.Parse(r["idActivite"].ToString());
+                    int id = int.Parse(r["ID"].ToString());
+                    int idA = int.Parse(r["idActivite"].ToString());
                     DateTime dateHeure = DateTime.Parse(r["DateHeure"].ToString());
                     int nbPlace = int.Parse(r["NombrePlaces"].ToString());
 
-                    ajouter(new Séance(id, dateHeure, nbPlace));
+                    ajouter(new Séance(id,idA, dateHeure, nbPlace));
                 }
 
                 r.Close();
@@ -267,12 +268,58 @@ namespace TravailSessionProg2024
             Ouverture();
             return liste_activites;
         }
+        public ObservableCollection<Séance> getListeSéancesSelonActivité(string nomActivité)
+        {
+            ObservableCollection<Séance> listS = new ObservableCollection<Séance>();
+            Ouverture();
+
+            try
+            {
+                MySqlCommand commande = new MySqlCommand();
+                commande.Connection = con;
+                commande.CommandText = $"select * from seances where idActivite = (select ID from activites where Nom like \"{nomActivité}\")"; 
+                con.Open();
+                MySqlDataReader r = commande.ExecuteReader();
+
+                while (r.Read())
+                {
+                    int id = int.Parse(r["ID"].ToString());
+                    int idA = int.Parse(r["idActivite"].ToString());
+                    DateTime dateHeure = DateTime.Parse(r["DateHeure"].ToString());
+                    int nbPlace = int.Parse(r["NombrePlaces"].ToString());
+
+                    if (nbPlace > 0)
+                    {
+                        listS.Add(new Séance(id, idA, dateHeure, nbPlace));
+                    }
+                   
+                }
+
+                r.Close();
+                con.Close();
+
+
+            }
+            catch (Exception ex)
+            {
+                if (con.State == System.Data.ConnectionState.Open)
+                {
+                    con.Close();
+                }
+            }
+
+            return listS;
+        }
 
 
         //GET OBJECTS
         public Adhérent getAdhérent(int position)
         {
             return liste_user[position];
+        }
+        public Séance getSéance(int position)
+        {
+            return liste_seances[position];
         }
         public Administrateur GetAdministrateur(int position)
         {
@@ -319,13 +366,11 @@ namespace TravailSessionProg2024
         //SUPPRIMER
         public void supprimerAdhérent(int position)
         {
-            BD_Supprimer(Singleton.getInstance().getAdhérent(position));
             liste_user.RemoveAt(position);
         }
         public void supprimerActivité(int position)
         {
-            BD_Supprimer(Singleton.getInstance().GetActivites(position));
-            liste_user.RemoveAt(position);
+            liste_activites.RemoveAt(position);
         }
 
 
@@ -344,16 +389,22 @@ namespace TravailSessionProg2024
             return false;
         }
 
-        public void BD_Ajouter(Adhérent user)
+        public void BD_Ajouter(string nom, string prenom, string adresse, DateOnly dateNaissance, string motdepasse)
         {
             try
             {
-                MySqlCommand commande = new MySqlCommand();
+                MySqlCommand commande = new MySqlCommand("CreerAdherent");
                 commande.Connection = con;
-                commande.CommandText = $"insert into adherents (Nom, Prenom, Adresse, DateNaissance, Age, MotDePasse, CodeAdherent) values (\"{user.Nom}\", \"{user.Prenom}\", \"{user.Adresse}\", \"{user.DateNaissance}\", {user.Age}, \"{user.MotDePasse}\", \"{user.CodeAdherent}\")";
+                commande.CommandType = System.Data.CommandType.StoredProcedure;
+                commande.Parameters.AddWithValue("p_Nom", $"{nom}");
+                commande.Parameters.AddWithValue("p_Prenom", $"{prenom}");
+                commande.Parameters.AddWithValue("p_Adresse", $"{adresse}");
+                commande.Parameters.AddWithValue("p_DateNaissance", $"{dateNaissance}");
+                commande.Parameters.AddWithValue("p_MotDePasse", $"{motdepasse}");
 
                 con.Open();
-                commande.ExecuteNonQuery();
+                commande.Prepare();
+                int i = commande.ExecuteNonQuery();
 
                 con.Close();
             }
@@ -380,6 +431,7 @@ namespace TravailSessionProg2024
 
                 con.Close();
 
+
             }
             catch (Exception ex)
             {
@@ -390,18 +442,22 @@ namespace TravailSessionProg2024
             }
         }
 
-        public void BD_Supprimer(Activité activité)
+        public void BD_Supprimer(Activité activité, int index)
         {
             try
             {
-                MySqlCommand commande = new MySqlCommand();
+                MySqlCommand commande = new MySqlCommand("SupprimerActivite");
                 commande.Connection = con;
-                commande.CommandText = $"Delete from activites WHERE Nom = '{activité.Nom}'";
+                commande.CommandType = System.Data.CommandType.StoredProcedure;
+                commande.Parameters.AddWithValue("nomActivite", $"{activité.Nom}");
 
                 con.Open();
-                commande.ExecuteNonQuery();
+                commande.Prepare();
+                int i = commande.ExecuteNonQuery();
 
                 con.Close();
+
+                liste_activites.RemoveAt(index);
 
             }
             catch (Exception ex)
@@ -631,9 +687,32 @@ namespace TravailSessionProg2024
         }
 
 
+        //FONCTION POUR LA PAGE ACTIVITÉ
+        public void BD_AjouterParticipation(int idSéance, int note)
+        {
+            try
+            {
+                MySqlCommand commande = new MySqlCommand("CreerAdherent");
+                commande.Connection = con;
+                commande.CommandType = System.Data.CommandType.StoredProcedure;
+                commande.Parameters.AddWithValue("p_CodeAdherent", $"{adhérent_connecter.CodeAdherent}");
+                commande.Parameters.AddWithValue("p_idSeance", $"{idSéance}");
 
+                con.Open();
+                commande.Prepare();
+                int i = commande.ExecuteNonQuery();
 
-
+                con.Close();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.ToString());
+                if (con.State == System.Data.ConnectionState.Open)
+                {
+                    con.Close();
+                }
+            }
+        }
 
 
 

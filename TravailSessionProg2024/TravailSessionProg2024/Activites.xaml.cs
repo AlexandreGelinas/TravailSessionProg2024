@@ -7,9 +7,12 @@ using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using TravailSessionProg2024.Classes;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 
@@ -23,6 +26,7 @@ namespace TravailSessionProg2024
     /// </summary>
     public sealed partial class Activites : Page
     {
+        ObservableCollection<Séance> listS;
         public Activites()
         {
             this.InitializeComponent();
@@ -37,12 +41,53 @@ namespace TravailSessionProg2024
 
         private void Btn_supprimer_Click(object sender, RoutedEventArgs e)
         {
-
+            if (Singleton.getInstance().getNiveauPermission() != 2)
+            {
+                TeachingTips.Content = "Vous n'avez pas les permissions de supprimer une activité.";
+                TeachingTips.IsOpen = true;
+            }
+            else
+            {
+                Activité act = (Activité)lvActivités.SelectedItem;
+                Singleton.getInstance().BD_Supprimer(act, lvActivités.SelectedIndex);
+            }
         }
 
-        private void Btn_inscription_Click(object sender, RoutedEventArgs e)
+        private async void Btn_inscription_Click(object sender, RoutedEventArgs e)
         {
+            if (Singleton.getInstance().getNiveauPermission() == 0)
+            {
+                Activité act = (Activité)lvActivités.SelectedItem;
+                listS = Singleton.getInstance().getListeSéancesSelonActivité(act.Nom);
+                ObservableCollection<DateTime> listSHeure = new ObservableCollection<DateTime>();
+                foreach (Séance o in listS)
+                {
+                    listSHeure.Add(o.DateHeure);
+                }
+                GridView GridView = new GridView();
+                GridView.ItemsSource = listSHeure;
+               
 
+                ContentDialog inscriptionDialog = new ContentDialog()
+                {
+                    XamlRoot = this.XamlRoot,
+                    Title = $"S'inscrire a l'activité: {act.Nom}",
+                    Content = GridView,
+                    PrimaryButtonText = "S'inscrire",
+                    CloseButtonText = "Annuler"
+                };
+                var result = await inscriptionDialog.ShowAsync();
+                if (result+"" == "Primary")
+                {
+                   Séance obj = listS[GridView.SelectedIndex];
+                   Singleton.getInstance().BD_AjouterParticipation(obj.ID, 0);
+                }
+            }
+            else
+            {
+                TeachingTips.Content = "Vous devez être un adhérant pour vous inscrire a une activité";
+                TeachingTips.IsOpen = true;
+            }
         }
     }
 }
