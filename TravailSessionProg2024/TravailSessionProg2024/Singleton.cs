@@ -12,6 +12,7 @@ using Windows.Media.Protection.PlayReady;
 using TravailSessionProg2024.Classes;
 using WinRT;
 using Windows.System;
+using System.Data;
 
 namespace TravailSessionProg2024
 {
@@ -61,6 +62,7 @@ namespace TravailSessionProg2024
 
             while (r.Read())
             {
+                int id = int.Parse(r["ID"].ToString());
                 string nom = r["Nom"].ToString();
                 string prenom = r["Prenom"].ToString();
                 string adresse = r["Adresse"].ToString();
@@ -69,7 +71,7 @@ namespace TravailSessionProg2024
                 string mdp = r["MotDePasse"].ToString();
                 string codeAdherent = r["CodeAdherent"].ToString();
 
-                ajouter(new Adhérent(codeAdherent, mdp, prenom, nom, adresse, dateNaissance, age));
+                ajouter(new Adhérent(id, codeAdherent, mdp, prenom, nom, adresse, dateNaissance, age));
             }
 
             r.Close();
@@ -136,7 +138,7 @@ namespace TravailSessionProg2024
                     double prixVenteParClient = double.Parse(r["PrixVenteParClient"].ToString());
                     int id = int.Parse(r["ID"].ToString());
 
-                    ajouter(new Activité(nom, type, coutOrganisation, prixVenteParClient));
+                    ajouter(new Activité(id,nom, type, coutOrganisation, prixVenteParClient));
                 }
 
                 r.Close();
@@ -688,14 +690,14 @@ namespace TravailSessionProg2024
 
 
         //FONCTION POUR LA PAGE ACTIVITÉ
-        public void BD_AjouterParticipation(int idSéance, int note)
+        public void BD_AjouterParticipation(int idSéance)
         {
             try
             {
-                MySqlCommand commande = new MySqlCommand("CreerAdherent");
+                MySqlCommand commande = new MySqlCommand("AjouterParticipant");
                 commande.Connection = con;
                 commande.CommandType = System.Data.CommandType.StoredProcedure;
-                commande.Parameters.AddWithValue("p_CodeAdherent", $"{adhérent_connecter.CodeAdherent}");
+                commande.Parameters.AddWithValue("p_idAdherent", $"{adhérent_connecter.ID}");
                 commande.Parameters.AddWithValue("p_idSeance", $"{idSéance}");
 
                 con.Open();
@@ -712,6 +714,41 @@ namespace TravailSessionProg2024
                     con.Close();
                 }
             }
+        }
+
+        public bool BD_VerificationSiParticipation(int idActivite)
+        {
+            try
+            {
+                MySqlCommand commande = new MySqlCommand();
+                commande.Connection = con;
+                commande.CommandText = $"Select COUNT(*) as count from participations where idAdherent = {adhérent_connecter.ID}  AND idSeance in (select ID from seances where idActivite = {idActivite})";
+
+                con.Open();
+                MySqlDataReader reader = commande.ExecuteReader();
+                while (reader.Read())
+                {
+                    int count = Convert.ToInt32(reader["count"]);
+                    if (count > 0)
+                    {
+                        return true;
+                    }
+                }
+                reader.Close();
+                con.Close();
+
+
+            }
+            catch (Exception ex)
+            {
+                if (con.State == System.Data.ConnectionState.Open)
+                {
+                    con.Close();
+                    return true;
+                }
+            }
+
+            return false;
         }
 
 

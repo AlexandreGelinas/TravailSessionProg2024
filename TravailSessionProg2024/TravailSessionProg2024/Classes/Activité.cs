@@ -8,14 +8,16 @@ namespace TravailSessionProg2024.Classes
 {
     internal class Activité
     {
+        public int ID { get; set; }
         public string Nom { get; set; }
         public string Type { get; set; }
         public double CoutOrganisation { get; set; }
         public double PrixVenteParClient { get; set; }
 
 
-        public Activité (string nom, string type, double coutOrganisation, double prixVenteParClient)
+        public Activité (int id,string nom, string type, double coutOrganisation, double prixVenteParClient)
         {
+            ID = id;
             Nom = nom;
             Type = type;
             CoutOrganisation = coutOrganisation;
@@ -25,7 +27,7 @@ namespace TravailSessionProg2024.Classes
         // Retourne une ligne de string pour CSV
         public override string ToString()
         {
-            return $"{Nom};{Type};{CoutOrganisation};{PrixVenteParClient}";
+            return $"{ID};{Nom};{Type};{CoutOrganisation};{PrixVenteParClient}";
         }
 
         

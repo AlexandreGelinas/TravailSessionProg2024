@@ -121,11 +121,11 @@ namespace TravailSessionProg2024
             }
             else if (Singleton.getInstance().getNiveauPermission() == 1)
             {
-                nvi.Content = Singleton.getInstance().getAdhérentConnecter().Prenom;
+                nvi.Content = Singleton.getInstance().getAdhérentConnecter().Prenom + " " + Singleton.getInstance().getAdhérentConnecter().Nom;
             }
             else if (Singleton.getInstance().getNiveauPermission() == 2)
             {
-                nvi.Content = Singleton.getInstance().getAdminConnecter().Prenom;
+                nvi.Content = Singleton.getInstance().getAdminConnecter().Prenom + " " + Singleton.getInstance().getAdminConnecter().Nom;
             }
         }
 

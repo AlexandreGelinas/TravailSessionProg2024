@@ -43,7 +43,7 @@ namespace TravailSessionProg2024
         {
             if (Singleton.getInstance().getNiveauPermission() != 2)
             {
-                TeachingTips.Content = "Vous n'avez pas les permissions de supprimer une activité.";
+                TeachingTips.Content = "Vous n'avez pas les permissions de supprimer \n une activité.";
                 TeachingTips.IsOpen = true;
             }
             else
@@ -55,10 +55,16 @@ namespace TravailSessionProg2024
 
         private async void Btn_inscription_Click(object sender, RoutedEventArgs e)
         {
-            if (Singleton.getInstance().getNiveauPermission() == 0)
+            if (Singleton.getInstance().getNiveauPermission() == 1)
             {
                 Activité act = (Activité)lvActivités.SelectedItem;
                 listS = Singleton.getInstance().getListeSéancesSelonActivité(act.Nom);
+                if (Singleton.getInstance().BD_VerificationSiParticipation(act.ID) == true)
+                {
+                    TeachingTips.Content = "Vous êtes deja inscrit a cette activitée.";
+                    TeachingTips.IsOpen = true;
+                    return;
+                }
                 ObservableCollection<DateTime> listSHeure = new ObservableCollection<DateTime>();
                 foreach (Séance o in listS)
                 {
@@ -80,7 +86,9 @@ namespace TravailSessionProg2024
                 if (result+"" == "Primary")
                 {
                    Séance obj = listS[GridView.SelectedIndex];
-                   Singleton.getInstance().BD_AjouterParticipation(obj.ID, 0);
+                   Singleton.getInstance().BD_AjouterParticipation(obj.ID);
+                    TeachingTips.Content = "Vous avez été inscrit a la séance.";
+                    TeachingTips.IsOpen = true;
                 }
             }
             else

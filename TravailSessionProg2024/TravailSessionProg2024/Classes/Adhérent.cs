@@ -8,6 +8,8 @@ namespace TravailSessionProg2024.Classes
 {
     internal class Adhérent
     {
+
+        public int ID { get; set; }
         public string CodeAdherent { get; set; }
         public string MotDePasse { get; set; }
         public string Prenom {  get; set; }
@@ -16,9 +18,9 @@ namespace TravailSessionProg2024.Classes
         public DateOnly DateNaissance { get; set; }
         public int Age { get; set; }
 
-        public Adhérent(string codeAdherent, string motDePasse, string prenom, string nom, string adresse, DateOnly dateNaissance, int age)
+        public Adhérent(int id, string codeAdherent, string motDePasse, string prenom, string nom, string adresse, DateOnly dateNaissance, int age)
         {
-
+            ID = id;
             CodeAdherent = codeAdherent;
             MotDePasse = motDePasse;
             Prenom = prenom;
@@ -32,7 +34,7 @@ namespace TravailSessionProg2024.Classes
         //Pour importation CSV
         public override string ToString() {
 
-            return $"{Prenom};{Nom};{Adresse};{DateNaissance};{Age};{CodeAdherent};{MotDePasse}";
+            return $"{ID};{Prenom};{Nom};{Adresse};{DateNaissance};{Age};{CodeAdherent};{MotDePasse}";
                 
 
         }

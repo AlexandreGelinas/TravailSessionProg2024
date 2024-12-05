@@ -31,14 +31,14 @@
 
         <!-- Buttons pour aller entre Connexion et Inscription -->
         <StackPanel x:Name="stckpnl_btn_formulaire" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button x:Name="btn_login" Content="Connexion" Click="btn_login_Click" Background="OrangeRed" />
+            <Button x:Name="btn_login" Content="Connexion" Click="btn_login_Click" Background="OrangeRed"/>
             <Button x:Name="btn_register" Content="Inscription" Click="btn_register_Click" />
         </StackPanel>
 
         <!-- Formulaire de connexion -->
         <StackPanel x:Name="login" HorizontalAlignment="Center" Visibility="Visible" Spacing="10">
-            <TextBox x:Name="txtbox_login_username" Width="300" Header="Nom d'utilisateur" PlaceholderText="Entrez votre nom d'utilisateur" />
-            <PasswordBox x:Name="txtbox_login_mdp" Width="300" Header="Mot de passe" PlaceholderText="Entrez votre mot de passe" />
+            <TextBox x:Name="txtbox_login_username" Width="300" Header="Nom d'utilisateur" PlaceholderText="Entrez votre nom d'utilisateur" Text="AL-1995-097"/>
+            <PasswordBox x:Name="txtbox_login_mdp" Width="300" Header="Mot de passe" PlaceholderText="Entrez votre mot de passe" Password="Pomme123"/>
             <Button x:Name="submit_login" Content="Se connecter" Click="submit_login_Click" HorizontalAlignment="Center" />
         </StackPanel>
 
