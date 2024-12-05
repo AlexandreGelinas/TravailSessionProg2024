@@ -1,3 +1,4 @@
+using Microsoft.UI;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
@@ -26,6 +27,36 @@ namespace TravailSessionProg2024
         public Admin()
         {
             this.InitializeComponent();
+        }
+
+        private void btn_Adherent_Click(object sender, RoutedEventArgs e)
+        {
+            stckpnl_ad.Visibility = Visibility.Visible;
+            stckpnl_ac.Visibility = Visibility.Collapsed;
+            stckpnl_se.Visibility = Visibility.Collapsed;
+            btn_Adherent.Background = new SolidColorBrush(Colors.OrangeRed);
+            btn_Activite.Background = null;
+            btn_Seance.Background = null;
+        }
+
+        private void btn_Activite_Click(object sender, RoutedEventArgs e)
+        {
+            stckpnl_ad.Visibility = Visibility.Collapsed;
+            stckpnl_ac.Visibility = Visibility.Visible;
+            stckpnl_se.Visibility = Visibility.Collapsed;
+            btn_Adherent.Background = null;
+            btn_Activite.Background = new SolidColorBrush(Colors.OrangeRed);
+            btn_Seance.Background = null;
+        }
+
+        private void btn_Seance_Click(object sender, RoutedEventArgs e)
+        {
+            stckpnl_ad.Visibility = Visibility.Collapsed;
+            stckpnl_ac.Visibility = Visibility.Collapsed;
+            stckpnl_se.Visibility = Visibility.Visible;
+            btn_Adherent.Background = null;
+            btn_Activite.Background = null;
+            btn_Seance.Background = new SolidColorBrush(Colors.OrangeRed);
         }
     }
 }
