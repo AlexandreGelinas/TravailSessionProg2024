@@ -58,6 +58,9 @@ namespace TravailSessionProg2024
             if (Singleton.getInstance().getNiveauPermission() == 1)
             {
                 Activité act = (Activité)lvActivités.SelectedItem;
+                if (act == null) {
+                    return;
+                }
                 listS = Singleton.getInstance().getListeSéancesSelonActivité(act.Nom);
                 if (Singleton.getInstance().BD_VerificationSiParticipation(act.ID) == true)
                 {
@@ -85,10 +88,25 @@ namespace TravailSessionProg2024
                 var result = await inscriptionDialog.ShowAsync();
                 if (result+"" == "Primary")
                 {
-                   Séance obj = listS[GridView.SelectedIndex];
-                   Singleton.getInstance().BD_AjouterParticipation(obj.ID);
+                    if (GridView.SelectedIndex < 0)
+                    {
+                        return;
+                    }
+                    Séance obj;
+                    try
+                    {
+                      obj = listS[GridView.SelectedIndex];
+                    }
+                    catch (Exception ex) {     
+                        obj = null;
+                    }
+                    if (obj != null)
+                    {
+                    Singleton.getInstance().BD_AjouterParticipation(obj.ID);
                     TeachingTips.Content = "Vous avez été inscrit a la séance.";
                     TeachingTips.IsOpen = true;
+                    }
+                   
                 }
             }
             else
