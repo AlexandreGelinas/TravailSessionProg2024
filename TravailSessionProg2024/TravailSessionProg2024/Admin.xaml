@@ -9,107 +9,99 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+    <!-- Définition des settings "équivalent à la balise <Style> en HTML/CSS" pour la page. Permet de féfinir un style 
+     au début de la page et ne pas avoir à écrire du code en double ou en triple.-->
+    <Page.Resources>
+        <Style x:Key="MainButtonStyle" TargetType="Button"> <!-- Style pour tout les boutons -->
+            <Setter Property="Width" Value="150"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="CornerRadius" Value="5"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="#0078D7"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid>
+                            <Border 
+                                Background="{TemplateBinding Background}" 
+                                CornerRadius="5" 
+                                BorderBrush="White" 
+                                BorderThickness="1">
+                                <ContentPresenter 
+                                    HorizontalAlignment="Center" 
+                                    VerticalAlignment="Center" />
+                            </Border>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
 
-        <!--Affichage si erreur-->
-        <TeachingTip x:Name="TeachingTips"
-            Title="Erreur"
-            Subtitle=""
-            IsOpen="False"
-            HorizontalAlignment="Center">
-            <TeachingTip.IconSource>
-                <SymbolIconSource Symbol="Cancel" />
-            </TeachingTip.IconSource>
-        </TeachingTip>
-
-        <StackPanel Orientation="Horizontal" Margin="0 10 0 20">
-            <Button x:Name="btn_Adherent" Content="Adhérent" Click="btn_Adherent_Click"/>
-            <Button x:Name="btn_Activite" Content="Activités" Click="btn_Activite_Click"/>
-            <Button x:Name="btn_Seance" Content="Séances" Click="btn_Seance_Click"/>
+    <Grid>
+        
+        <!-- Titre -->
+        <StackPanel Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Center" Spacing="20" Margin="0,40,0,20">
+            <TextBlock Text="Gestion Administrateur" 
+                       FontSize="32" 
+                       FontWeight="Bold" 
+                       Foreground="#0078D7" 
+                       HorizontalAlignment="Center"/>
         </StackPanel>
         
-        
-        <StackPanel x:Name="stckpnl_ad" Visibility="Collapsed"> <!--Adhérent-->
-            <StackPanel Orientation="Horizontal" >
-                <Button Content="Ajouter"
-                    Width="150"
-                    Height="40"
-                    Margin="5"
-                    Background="Green"
-                    Foreground="White"/>
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="20">
 
-            <!-- Bouton pour supprimer -->
-                <Button Content="Supprimer"
-                    Width="150"
-                    Height="40"
-                    Margin="5"
-                    Background="Red"
-                    Foreground="White"/>
+            <!-- Affichage si erreur -->
+            <TeachingTip x:Name="TeachingTips"
+                         Title="Erreur"
+                         Subtitle=""
+                         IsOpen="False"
+                         HorizontalAlignment="Center"
+                         Margin="0,0,0,20">
+                <TeachingTip.IconSource>
+                    <SymbolIconSource Symbol="Cancel" />
+                </TeachingTip.IconSource>
+            </TeachingTip>
 
-                <Button Content="Modifier"
-                    Width="150"
-                    Height="40"
-                    Margin="5"
-                    Background="Blue"
-                    Foreground="White"/>
+            <!-- Menu Principal (les trois boutons) -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="10">
+                <Button x:Name="btn_Adherent" Content="Adhérent" Click="btn_Adherent_Click" Style="{StaticResource MainButtonStyle}" Background="#2D89EF"/>
+                <Button x:Name="btn_Activite" Content="Activités" Click="btn_Activite_Click" Style="{StaticResource MainButtonStyle}" Background="#00CC6A"/>
+                <Button x:Name="btn_Seance" Content="Séances" Click="btn_Seance_Click" Style="{StaticResource MainButtonStyle}" Background="#F7630C"/>
             </StackPanel>
-            
-        </StackPanel>
 
-
-        <StackPanel x:Name="stckpnl_ac" Visibility="Collapsed"> <!--Activités-->
-            <StackPanel Orientation="Horizontal">
-                <Button Content="Ajouter"
-                    Width="150"
-                    Height="40"
-                    Margin="5"
-                    Background="Green"
-                    Foreground="White"/>
-
-                <!-- Bouton pour supprimer -->
-                <Button Content="Supprimer"
-                    Width="150"
-                    Height="40"
-                    Margin="5"
-                    Background="Red"
-                    Foreground="White"/>
-
-                <Button Content="Modifier"
-                    Width="150"
-                    Height="40"
-                    Margin="5"
-                    Background="Blue"
-                    Foreground="White"/>
+            <!-- Adhérent -->
+            <StackPanel x:Name="stckpnl_ad" Visibility="Collapsed" HorizontalAlignment="Center" Spacing="10">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="10">
+                    <Button Content="Ajouter" Style="{StaticResource MainButtonStyle}" Background="Green"/>
+                    <Button Content="Supprimer" Style="{StaticResource MainButtonStyle}" Background="Red"/>
+                    <Button Content="Modifier" Style="{StaticResource MainButtonStyle}" Background="Blue"/>
+                </StackPanel>
             </StackPanel>
-        </StackPanel>
 
-
-        <StackPanel x:Name="stckpnl_se" Visibility="Collapsed"> <!--Séances-->
-            <StackPanel Orientation="Horizontal">
-                <Button Content="Ajouter"
-                    Width="150"
-                    Height="40"
-                    Margin="5"
-                    Background="Green"
-                    Foreground="White"/>
-
-                <!-- Bouton pour supprimer -->
-                <Button Content="Supprimer"
-                    Width="150"
-                    Height="40"
-                    Margin="5"
-                    Background="Red"
-                    Foreground="White"/>
-
-                <Button Content="Modifier"
-                    Width="150"
-                    Height="40"
-                    Margin="5"
-                    Background="Blue"
-                    Foreground="White"/>
+            <!-- Activités -->
+            <StackPanel x:Name="stckpnl_ac" Visibility="Collapsed" HorizontalAlignment="Center" Spacing="10">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="10">
+                    <Button Content="Ajouter" Style="{StaticResource MainButtonStyle}" Background="GreenYellow"/>
+                    <Button Content="Supprimer" Style="{StaticResource MainButtonStyle}" Background="Purple"/>
+                    <Button Content="Modifier" Style="{StaticResource MainButtonStyle}" Background="PowderBlue"/>
+                </StackPanel>
             </StackPanel>
+
+            <!-- Séances -->
+            <StackPanel x:Name="stckpnl_se" Visibility="Collapsed" HorizontalAlignment="Center" Spacing="10">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="10">
+                    <Button Content="Ajouter" Style="{StaticResource MainButtonStyle}" Background="Crimson"/>
+                    <Button Content="Supprimer" Style="{StaticResource MainButtonStyle}" Background="Gray"/>
+                    <Button Content="Modifier" Style="{StaticResource MainButtonStyle}" Background="Black"/>
+                </StackPanel>
+            </StackPanel>
+
         </StackPanel>
-        
-        
-    </StackPanel>
+    </Grid>
 </Page>

@@ -35,8 +35,8 @@ namespace TravailSessionProg2024
             stckpnl_ac.Visibility = Visibility.Collapsed;
             stckpnl_se.Visibility = Visibility.Collapsed;
             btn_Adherent.Background = new SolidColorBrush(Colors.OrangeRed);
-            btn_Activite.Background = null;
-            btn_Seance.Background = null;
+            btn_Activite.Background = new SolidColorBrush(Colors.Transparent); 
+            btn_Seance.Background = new SolidColorBrush(Colors.Transparent); 
         }
 
         private void btn_Activite_Click(object sender, RoutedEventArgs e)
@@ -44,9 +44,9 @@ namespace TravailSessionProg2024
             stckpnl_ad.Visibility = Visibility.Collapsed;
             stckpnl_ac.Visibility = Visibility.Visible;
             stckpnl_se.Visibility = Visibility.Collapsed;
-            btn_Adherent.Background = null;
+            btn_Adherent.Background = new SolidColorBrush(Colors.Transparent);
             btn_Activite.Background = new SolidColorBrush(Colors.OrangeRed);
-            btn_Seance.Background = null;
+            btn_Seance.Background = new SolidColorBrush(Colors.Transparent);
         }
 
         private void btn_Seance_Click(object sender, RoutedEventArgs e)
@@ -54,8 +54,8 @@ namespace TravailSessionProg2024
             stckpnl_ad.Visibility = Visibility.Collapsed;
             stckpnl_ac.Visibility = Visibility.Collapsed;
             stckpnl_se.Visibility = Visibility.Visible;
-            btn_Adherent.Background = null;
-            btn_Activite.Background = null;
+            btn_Adherent.Background = new SolidColorBrush(Colors.Transparent);
+            btn_Activite.Background = new SolidColorBrush(Colors.Transparent);
             btn_Seance.Background = new SolidColorBrush(Colors.OrangeRed);
         }
     }
