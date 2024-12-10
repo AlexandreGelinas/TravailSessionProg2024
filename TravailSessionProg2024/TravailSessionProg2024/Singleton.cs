@@ -391,24 +391,71 @@ namespace TravailSessionProg2024
             return false;
         }
 
-        public void BD_Ajouter(string nom, string prenom, string adresse, DateOnly dateNaissance, string motdepasse)
+        public void BD_Ajouter(Adhérent ad)
         {
             try
             {
                 MySqlCommand commande = new MySqlCommand("CreerAdherent");
                 commande.Connection = con;
                 commande.CommandType = System.Data.CommandType.StoredProcedure;
-                commande.Parameters.AddWithValue("p_Nom", $"{nom}");
-                commande.Parameters.AddWithValue("p_Prenom", $"{prenom}");
-                commande.Parameters.AddWithValue("p_Adresse", $"{adresse}");
-                commande.Parameters.AddWithValue("p_DateNaissance", $"{dateNaissance}");
-                commande.Parameters.AddWithValue("p_MotDePasse", $"{motdepasse}");
+                commande.Parameters.AddWithValue("p_Nom", $"{ad.Nom}");
+                commande.Parameters.AddWithValue("p_Prenom", $"{ad.Prenom}");
+                commande.Parameters.AddWithValue("p_Adresse", $"{ad.Adresse}");
+                commande.Parameters.AddWithValue("p_DateNaissance", $"{ad.DateNaissance}");
+                commande.Parameters.AddWithValue("p_MotDePasse", $"{ad.MotDePasse}");
 
                 con.Open();
                 commande.Prepare();
                 int i = commande.ExecuteNonQuery();
 
                 con.Close();
+                ajouter(ad);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.ToString());
+                if (con.State == System.Data.ConnectionState.Open)
+                {
+                    con.Close();
+                }
+            }
+        }
+        public void BD_Ajouter(Activité ac)
+        {
+            try
+            {
+                MySqlCommand commande = new MySqlCommand();
+                commande.Connection = con;
+                commande.CommandText = $"insert into activites (Nom, Type, CoutOrganisation, PrixVenteParClient) values (\"{ac.Nom}\",\"{ac.Type}\",\"{ac.CoutOrganisation}\",\"{ac.PrixVenteParClient}\" )";
+
+                con.Open();
+                commande.ExecuteNonQuery();
+
+                con.Close();
+                ajouter(ac);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.ToString());
+                if (con.State == System.Data.ConnectionState.Open)
+                {
+                    con.Close();
+                }
+            }
+        }
+        public void BD_Ajouter(Séance se)
+        {
+            try
+            {
+                MySqlCommand commande = new MySqlCommand();
+                commande.Connection = con;
+                commande.CommandText = $"insert into seances (idActivite, DateHeure, NombrePlaces) values (\"{se.IdActivité}\",\"{se.DateHeure}\",\"{se.NombrePlaces}\")";
+
+                con.Open();
+                commande.ExecuteNonQuery();
+
+                con.Close();
+                ajouter(se);
             }
             catch (Exception ex)
             {
@@ -427,6 +474,30 @@ namespace TravailSessionProg2024
                 MySqlCommand commande = new MySqlCommand();
                 commande.Connection = con;
                 commande.CommandText = $"Delete from adherents WHERE CodeAdherent = '{user.CodeAdherent}'";
+
+                con.Open();
+                commande.ExecuteNonQuery();
+
+                con.Close();
+
+
+            }
+            catch (Exception ex)
+            {
+                if (con.State == System.Data.ConnectionState.Open)
+                {
+                    con.Close();
+                }
+            }
+        }
+        
+        public void BD_Supprimer(Séance se)
+        {
+            try
+            {
+                MySqlCommand commande = new MySqlCommand();
+                commande.Connection = con;
+                commande.CommandText = $"Delete from seance WHERE ID = '{se.ID}'";
 
                 con.Open();
                 commande.ExecuteNonQuery();
@@ -753,7 +824,43 @@ namespace TravailSessionProg2024
 
 
 
+        public ObservableCollection<Activité> BD_ActiviteUserParticipate()
+        {
+            ObservableCollection<Activité> list = new ObservableCollection<Activité>();
 
+            try
+            {
+                MySqlCommand commande = new MySqlCommand();
+                commande.Connection = con;
+                commande.CommandText = $"select * from activites where ID in (select idActivite from seances where ID in (select idSeance from participations where idAdherent in (select ID from adherents where CodeAdherent = \"{adhérent_connecter.CodeAdherent}\")));";
+                con.Open();
+                MySqlDataReader r = commande.ExecuteReader();
+
+                while (r.Read())
+                {
+                    string nom = r["Nom"].ToString();
+                    string type = r["Type"].ToString();
+                    double coutOrganisation = double.Parse(r["CoutOrganisation"].ToString());
+                    double prixVenteParClient = double.Parse(r["PrixVenteParClient"].ToString());
+                    int id = int.Parse(r["ID"].ToString());
+
+                    list.Add(new Activité(id, nom, type, coutOrganisation, prixVenteParClient));
+                }
+
+                r.Close();
+                con.Close();
+            }
+            catch (Exception ex)
+            {
+                if (con.State == System.Data.ConnectionState.Open)
+                {
+                    con.Close();
+                }
+                Debug.WriteLine(ex.Message);
+            }
+
+            return list;
+        }
 
 
 
