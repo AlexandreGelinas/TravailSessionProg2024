@@ -863,6 +863,43 @@ namespace TravailSessionProg2024
 
             return list;
         }
+        public ObservableCollection<Activité> BD_NoteParActivitéUser()
+        {
+            ObservableCollection<Activité> list = new ObservableCollection<Activité>();
+
+            try
+            {
+                MySqlCommand commande = new MySqlCommand();
+                commande.Connection = con;
+                commande.CommandText = $"select * from evaluations where idActivite = 1 and idAdherent in (select id from adherents where CodeAdherent = \"\")\r\n";
+                con.Open();
+                MySqlDataReader r = commande.ExecuteReader();
+
+                while (r.Read())
+                {
+                    string nom = r["Nom"].ToString();
+                    string type = r["Type"].ToString();
+                    double coutOrganisation = double.Parse(r["CoutOrganisation"].ToString());
+                    double prixVenteParClient = double.Parse(r["PrixVenteParClient"].ToString());
+                    int id = int.Parse(r["ID"].ToString());
+
+                    list.Add(new Activité(id, nom, type, coutOrganisation, prixVenteParClient));
+                }
+
+                r.Close();
+                con.Close();
+            }
+            catch (Exception ex)
+            {
+                if (con.State == System.Data.ConnectionState.Open)
+                {
+                    con.Close();
+                }
+                Debug.WriteLine(ex.Message);
+            }
+
+            return list;
+        }
 
 
 
