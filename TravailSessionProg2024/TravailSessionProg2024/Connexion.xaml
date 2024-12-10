@@ -44,10 +44,16 @@
 
         <!-- Formulaire d'inscription -->
         <StackPanel x:Name="register" HorizontalAlignment="Center" Visibility="Collapsed" Spacing="10">
-            <TextBox Width="300" Header="Nom d'utilisateur" PlaceholderText="Entrez votre nom d'utilisateur" />
-            <PasswordBox Width="300" Header="Mot de passe" PlaceholderText="Entrez votre mot de passe" />
+            <TextBox x:Name="CodeAdherent" Width="300" Header="Code Adhérent" PlaceholderText="Entrez votre code d'adhérent" />
+            <PasswordBox x:Name="MotDePasse" Width="300" Header="Mot de Passe" PlaceholderText="Entrez votre mot de passe" />
+            <TextBox x:Name="Prenom" Width="300" Header="Prénom" PlaceholderText="Entrez votre prénom" />
+            <TextBox x:Name="Nom" Width="300" Header="Nom" PlaceholderText="Entrez votre nom" />
+            <TextBox x:Name="Adresse" Width="300" Header="Adresse" PlaceholderText="Entrez votre adresse" TextWrapping="Wrap" AcceptsReturn="True" />
+            <DatePicker x:Name="DateNaissance" Width="300" Header="Date de Naissance" />
+            <TextBox x:Name="Age" Width="300" Header="Âge" PlaceholderText="Entrez votre âge" InputScope="Number" />
             <Button x:Name="submit_register" Content="S'inscrire" HorizontalAlignment="Center" />
         </StackPanel>
+
 
         <!-- Bouton de déconnection -->
         <StackPanel x:Name="deconnect" HorizontalAlignment="Center" Visibility="Collapsed">
