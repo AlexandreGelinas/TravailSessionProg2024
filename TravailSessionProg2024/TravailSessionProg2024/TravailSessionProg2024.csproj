@@ -17,6 +17,7 @@
     <None Remove="Admin.xaml" />
     <None Remove="Connexion.xaml" />
     <None Remove="Export.xaml" />
+    <None Remove="Notes.xaml" />
     <None Remove="Statistique.xaml" />
   </ItemGroup>
 
@@ -44,6 +45,11 @@
   -->
   <ItemGroup Condition="'$(DisableMsixProjectCapabilityAddedByProject)'!='true' and '$(EnableMsixTooling)'=='true'">
     <ProjectCapability Include="Msix" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Notes.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Statistique.xaml">

@@ -65,16 +65,20 @@ namespace TravailSessionProg2024
                 case 0: contentFrame.Navigate(typeof(Activites));
                     break;
 
-                case 1: contentFrame.Navigate(typeof(Connexion));
+                case 1: contentFrame.Navigate(typeof(Notes));
                     break;
 
-                case 2: contentFrame.Navigate(typeof(Admin));
+                case 2: contentFrame.Navigate(typeof(Connexion)); 
                     break;
 
-                case 3: contentFrame.Navigate(typeof(Export));
+                case 3: contentFrame.Navigate(typeof(Admin)); 
                     break;
 
-                case 4: contentFrame.Navigate(typeof(Statistique));
+                case 4: contentFrame.Navigate(typeof(Export)); 
+                    break;
+
+                case 5:
+                    contentFrame.Navigate(typeof(Statistique)); 
                     break;
             }
         }

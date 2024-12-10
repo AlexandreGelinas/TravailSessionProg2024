@@ -35,6 +35,7 @@ namespace TravailSessionProg2024
             liste_admin = new ObservableCollection<Administrateur>();
             liste_activites = new ObservableCollection<Activité>();
             liste_seances = new ObservableCollection<Séance>();
+            
             con = new MySqlConnection("Server=cours.cegep3r.info;Database=a2024_420-345-ri_eq9;Uid=2375213;Pwd=2375213;");
         }
 
@@ -270,6 +271,7 @@ namespace TravailSessionProg2024
             Ouverture();
             return liste_activites;
         }
+
         public ObservableCollection<Séance> getListeSéancesSelonActivité(string nomActivité)
         {
             ObservableCollection<Séance> listS = new ObservableCollection<Séance>();

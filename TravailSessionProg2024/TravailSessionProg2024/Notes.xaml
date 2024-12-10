@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="TravailSessionProg2024.Notes"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:TravailSessionProg2024"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <StackPanel HorizontalAlignment="Center" Margin="20">
+
+        <!--Affichage si erreur-->
+        <TeachingTip x:Name="TeachingTips"
+      Title="Erreur"
+      Subtitle=""
+      IsOpen="False"
+      HorizontalAlignment="Center">
+            <TeachingTip.IconSource>
+                <SymbolIconSource Symbol="Cancel" />
+            </TeachingTip.IconSource>
+        </TeachingTip>
+
+        <!-- Titre de la page -->
+        <TextBlock Text="Notes des activités"
+            FontSize="30"
+            FontWeight="Bold"
+            Foreground="Gray"
+            HorizontalAlignment="Center"
+            Margin="20"/>
+
+        <!-- Titre pour les colonnes -->
+        <StackPanel Orientation="Horizontal" Width="700" Margin="10,0,10,10">
+            <TextBlock Text="Activité:" Width="250" FontWeight="Bold" Foreground="Wheat" TextAlignment="Left" Margin="5" FontSize="20"/>
+            <!--<TextBlock Text="Type:" Width="250" FontWeight="Bold" Foreground="Wheat" TextAlignment="Left" Margin="5" FontSize="20"/>
+            <TextBlock Text="Prix:" Width="250" FontWeight="Bold" Foreground="Wheat" TextAlignment="Left" Margin="5" FontSize="20"/>-->
+        </StackPanel>
+
+        <!-- ListView -->
+        <ListView x:Name="lvNotes"
+          Width="700"
+          Height="300"
+          Margin="10"
+          BorderBrush="Gray"
+          BorderThickness="1"
+          SelectionChanged="lvNotes_SelectionChanged">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal" Margin="5">
+                        <TextBlock Text="{Binding Nom}" Width="250" Margin="5"/>
+                        <TextBlock Text="{Binding Note}" Width="250" Margin="5"/>
+                        <TextBlock Text="{Binding Commentaire}" Width="250" Margin="5"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <!-- Boutons pour ajouter une note à une activité -->
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
+            <Button Content="Noter une activité"
+            Width="150"
+            Height="40"
+            Margin="5"
+            Click="Button_Noter"
+            Background="Green"
+            Foreground="White"/>
+        </StackPanel>
+
+    </StackPanel>
+</Page>
