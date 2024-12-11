@@ -84,5 +84,10 @@ namespace TravailSessionProg2024
             btn_register.Background = null;
             btn_login.Background = new SolidColorBrush(Colors.OrangeRed);
         }
+
+        private void btn_submit_register(object sender, RoutedEventArgs e)
+        {
+            
+        }
     }
 }
