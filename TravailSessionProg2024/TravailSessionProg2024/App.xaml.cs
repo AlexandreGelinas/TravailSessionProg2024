@@ -1,4 +1,6 @@
 ﻿using Microsoft.UI.Xaml;
+using System.Globalization;
+using System.Threading;
 
 namespace TravailSessionProg2024
 {
@@ -26,6 +28,7 @@ namespace TravailSessionProg2024
         {
             MainWindow = new MainWindow();
             MainWindow.Activate();
+            
         }
     }
 }

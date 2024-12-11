@@ -345,6 +345,15 @@ namespace TravailSessionProg2024
         {
             return adhérent_connecter;
         }
+        public string getAdhérentSelonID(int id)
+        {
+            foreach(Adhérent obj in liste_user)
+            {
+                if (id == obj.ID)
+                    return obj.CodeAdherent;
+            }
+            return "";
+        }
 
 
         //AJOUTER
@@ -393,7 +402,7 @@ namespace TravailSessionProg2024
             return false;
         }
 
-        public void BD_Ajouter(Adhérent ad)
+        public int BD_Ajouter(Adhérent ad)
         {
             try
             {
@@ -408,10 +417,12 @@ namespace TravailSessionProg2024
 
                 con.Open();
                 commande.Prepare();
-                int i = commande.ExecuteNonQuery();
+                var resultat = commande.ExecuteScalar();
+                Debug.WriteLine(resultat);
 
                 con.Close();
-                ajouter(ad);
+                Ouverture();
+                return (int)resultat;
             }
             catch (Exception ex)
             {
@@ -421,6 +432,7 @@ namespace TravailSessionProg2024
                     con.Close();
                 }
             }
+            return -1;
         }
         public void BD_Ajouter(Activité ac)
         {

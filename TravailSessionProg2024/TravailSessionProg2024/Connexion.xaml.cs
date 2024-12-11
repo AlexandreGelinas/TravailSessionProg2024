@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using TravailSessionProg2024.Classes;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 
@@ -27,6 +28,7 @@ namespace TravailSessionProg2024
         public Connexion()
         {
             this.InitializeComponent();
+            DateNaissance.MaxYear = DateTime.Now.AddYears(-18);
         }
 
         private void btn_login_Click(object sender, RoutedEventArgs e)
@@ -58,6 +60,7 @@ namespace TravailSessionProg2024
             }
             else
             {
+                ToggleThemeTeachingTip1.Content = "Impossible de vous connecter. Veuillez réessayer ou contacter l'administrateur.";
                 ToggleThemeTeachingTip1.IsOpen = true;
                 txtbox_login_mdp.Password = "";
             }
@@ -83,6 +86,42 @@ namespace TravailSessionProg2024
             deconnect.Visibility = Visibility.Collapsed;
             btn_register.Background = null;
             btn_login.Background = new SolidColorBrush(Colors.OrangeRed);
+        }
+
+        private async void submit_register_Click(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(MotDePasse.Password) && !string.IsNullOrEmpty(Prenom.Text) && !string.IsNullOrEmpty(Nom.Text) && !string.IsNullOrEmpty(Adresse.Text) && !string.IsNullOrEmpty(Age.Text) && !string.IsNullOrEmpty(DateNaissance.Date.ToString()))
+            {
+              int i = Singleton.getInstance().BD_Ajouter(new Adhérent(-1, "null", MotDePasse.Password, Prenom.Text, Nom.Text, Adresse.Text, DateOnly.Parse(DateNaissance.Date.ToString().Substring(0,10)),int.Parse(Age.Text)));
+              if (i != -1)
+                {
+                    ContentDialog contentDialog = new ContentDialog
+                    {
+                        XamlRoot = this.XamlRoot,
+                        Title = "Succès!",
+                        Content = $"Votre compte a été créer, retenez votre code: {Singleton.getInstance().getAdhérentSelonID(i)}",
+                        CloseButtonText = "Fermer"
+                    };
+
+                    // Afficher le ContentDialog et attendre sa fermeture
+                    await contentDialog.ShowAsync();
+                    login.Visibility = Visibility.Visible;
+                    btn_register.Background = null;
+                    btn_login.Background = new SolidColorBrush(Colors.OrangeRed);
+                    register.Visibility = Visibility.Collapsed;
+                    MotDePasse.Password = "";
+                    Prenom.Text = "";
+                    Nom.Text = "";
+                    Age.Text = "";
+                    Adresse.Text = "";
+                }
+            }
+            else {
+                ToggleThemeTeachingTip1.Content = "Des champs sont vides.";
+                ToggleThemeTeachingTip1.IsOpen = true;
+            }
+
+
         }
     }
 }
