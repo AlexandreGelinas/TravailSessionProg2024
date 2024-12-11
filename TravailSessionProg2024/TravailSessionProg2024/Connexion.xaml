@@ -21,7 +21,7 @@
         <!-- Affichage si erreur -->
         <TeachingTip x:Name="ToggleThemeTeachingTip1"
                      Title="Erreur"
-                     Subtitle="Impossible de vous connecter. Veuillez réessayer ou contacter l'administrateur."
+                     Content=""
                      IsOpen="False"
                      HorizontalAlignment="Center">
             <TeachingTip.IconSource>
@@ -48,9 +48,9 @@
             <TextBox x:Name="Prenom" Width="300" Header="Prénom" PlaceholderText="Entrez votre prénom" />
             <TextBox x:Name="Nom" Width="300" Header="Nom" PlaceholderText="Entrez votre nom" />
             <TextBox x:Name="Adresse" Width="300" Header="Adresse" PlaceholderText="Entrez votre adresse" TextWrapping="Wrap" AcceptsReturn="True" />
-            <DatePicker x:Name="DateNaissance" Width="300" Header="Date de Naissance" />
-            <TextBox x:Name="Age" Width="300" Header="Âge" PlaceholderText="Entrez votre âge" InputScope="Number" />
-            <Button x:Name="submit_register" Click="btn_submit_register" Content="S'inscrire" HorizontalAlignment="Center" />
+            <DatePicker x:Name="DateNaissance" Width="300" Header="Date de Naissance"/>
+            <NumberBox x:Name="Age" Width="300" Header="Âge" PlaceholderText="Entrez votre âge" Minimum="18"/>
+            <Button x:Name="submit_register" Content="S'inscrire" HorizontalAlignment="Center" Click="submit_register_Click"/>
         </StackPanel>
 
 

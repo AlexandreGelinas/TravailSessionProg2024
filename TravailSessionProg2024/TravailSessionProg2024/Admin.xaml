@@ -76,29 +76,95 @@
             </StackPanel>
 
             <!-- Adhérent -->
-            <StackPanel x:Name="stckpnl_ad" Visibility="Collapsed" HorizontalAlignment="Center" Spacing="10">
+            <StackPanel x:Name="stckpnl_ad" Orientation="Vertical" Visibility="Collapsed" HorizontalAlignment="Center" Spacing="10">
+                <StackPanel Orientation="Horizontal" Width="700" Margin="20,0,0,0">
+                    <TextBlock Text="Code Adhérent:" Width="250" FontWeight="Bold" Foreground="Wheat" TextAlignment="Left" Margin="0" FontSize="20"/>
+                    <TextBlock Text="Nom:" Width="250" FontWeight="Bold" Foreground="Wheat" TextAlignment="Left" Margin="30,0,0,0" FontSize="20"/>
+                    <TextBlock Text="Prenom:" Width="250" FontWeight="Bold" Foreground="Wheat" TextAlignment="Left" Margin="0" FontSize="20"/>
+                </StackPanel>
+                <ListView x:Name="lvAdhérents"
+                Width="700"
+                Height="300"
+                Margin="0"
+                BorderBrush="Gray"
+                BorderThickness="1">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" Margin="5">
+                                <TextBlock Text="{Binding CodeAdherent}" Width="250" Margin="5"/>
+                                <TextBlock Text="{Binding Nom}" Width="250" Margin="5"/>
+                                <TextBlock Text="{Binding Prenom}" Width="250" Margin="5"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="10">
-                    <Button Content="Ajouter" Style="{StaticResource MainButtonStyle}" Background="Green"/>
-                    <Button Content="Supprimer" Style="{StaticResource MainButtonStyle}" Background="Red"/>
-                    <Button Content="Modifier" Style="{StaticResource MainButtonStyle}" Background="Blue"/>
+                    
+                    <Button x:Name="btn_ajouterAD" Content="Ajouter" Style="{StaticResource MainButtonStyle}" Background="Green" Click="btn_ajouterAD_Click"/>
+                    <Button x:Name="btn_supprimerAD" Content="Supprimer" Style="{StaticResource MainButtonStyle}" Background="Red" Click="btn_supprimerAD_Click"/>
+                    <Button x:Name="btn_modifierAD" Content="Modifier" Style="{StaticResource MainButtonStyle}" Background="Blue" Click="btn_modifierAD_Click"/>
                 </StackPanel>
             </StackPanel>
 
             <!-- Activités -->
-            <StackPanel x:Name="stckpnl_ac" Visibility="Collapsed" HorizontalAlignment="Center" Spacing="10">
+            <StackPanel x:Name="stckpnl_ac" Orientation="Vertical" Visibility="Collapsed" HorizontalAlignment="Center" Spacing="10">
+                <StackPanel Orientation="Horizontal" Width="700" Margin="20,0,0,0">
+                    <TextBlock Text="Activité:" Width="250" FontWeight="Bold" Foreground="Wheat" TextAlignment="Left" Margin="0" FontSize="20"/>
+                    <TextBlock Text="Type:" Width="250" FontWeight="Bold" Foreground="Wheat" TextAlignment="Left" Margin="30,0,0,0" FontSize="20"/>
+                    <TextBlock Text="Prix:" Width="250" FontWeight="Bold" Foreground="Wheat" TextAlignment="Left" Margin="0" FontSize="20"/>
+                </StackPanel>
+                <ListView x:Name="lvActivités"
+                                Width="700"
+                                Height="300"
+                                Margin="0"
+                                BorderBrush="Gray"
+                                BorderThickness="1">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" Margin="5">
+                                    <TextBlock Text="{Binding Nom}" Width="250" Margin="5"/>
+                                    <TextBlock Text="{Binding Type}" Width="250" Margin="5"/>
+                                    <!-- Modification du binding pour afficher le $ à coté du prix -->
+                                    <TextBlock Text="{Binding PrixAffiche}" Width="250" Margin="5"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="10">
-                    <Button Content="Ajouter" Style="{StaticResource MainButtonStyle}" Background="GreenYellow"/>
-                    <Button Content="Supprimer" Style="{StaticResource MainButtonStyle}" Background="Purple"/>
-                    <Button Content="Modifier" Style="{StaticResource MainButtonStyle}" Background="PowderBlue"/>
+
+                    <Button x:Name="btn_ajouterAC" Content="Ajouter" Style="{StaticResource MainButtonStyle}" Background="GreenYellow" Click="btn_ajouterAC_Click"/>
+                    <Button x:Name="btn_supprimerAC" Content="Supprimer" Style="{StaticResource MainButtonStyle}" Background="Purple" Click="btn_supprimerAC_Click"/>
+                    <Button x:Name="btn_modifierAC" Content="Modifier" Style="{StaticResource MainButtonStyle}" Background="PowderBlue" Click="btn_modifierAC_Click"/>
                 </StackPanel>
             </StackPanel>
 
             <!-- Séances -->
-            <StackPanel x:Name="stckpnl_se" Visibility="Collapsed" HorizontalAlignment="Center" Spacing="10">
+            <StackPanel x:Name="stckpnl_se" Orientation="Vertical" Visibility="Collapsed" HorizontalAlignment="Center" Spacing="10">
+                <StackPanel Orientation="Horizontal" Width="700" Margin="20,0,0,0">
+                    <TextBlock Text="ID Activité:" Width="250" FontWeight="Bold" Foreground="Wheat" TextAlignment="Left" Margin="0" FontSize="20"/>
+                    <TextBlock Text="Date/Heure:" Width="250" FontWeight="Bold" Foreground="Wheat" TextAlignment="Left" Margin="10,0,0,0" FontSize="20"/>
+                    <TextBlock Text="Nombre de places:" Width="250" FontWeight="Bold" Foreground="Wheat" TextAlignment="Left" Margin="0" FontSize="20"/>
+                </StackPanel>
+                <ListView x:Name="lvSéances"
+                Width="700"
+                Height="300"
+                Margin="0"
+                BorderBrush="Gray"
+                BorderThickness="1">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" Margin="5">
+                                <TextBlock Text="{Binding IdActivité}" Width="250" Margin="5"/>
+                                <TextBlock Text="{Binding DateHeure}" Width="250" Margin="5"/>
+                                <TextBlock Text="{Binding NombrePlaces}" Width="250" Margin="5"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="10">
-                    <Button Content="Ajouter" Style="{StaticResource MainButtonStyle}" Background="Crimson"/>
-                    <Button Content="Supprimer" Style="{StaticResource MainButtonStyle}" Background="Gray"/>
-                    <Button Content="Modifier" Style="{StaticResource MainButtonStyle}" Background="Black"/>
+                    <Button x:Name="btn_ajouterSE" Content="Ajouter" Style="{StaticResource MainButtonStyle}" Background="Crimson" Click="btn_ajouterSE_Click"/>
+                    <Button x:Name="btn_supprimerSE" Content="Supprimer" Style="{StaticResource MainButtonStyle}" Background="Gray" Click="btn_supprimerSE_Click"/>
+                    <Button x:Name="btn_modifierSE" Content="Modifier" Style="{StaticResource MainButtonStyle}" Background="Black" Click="btn_modifierSE_Click"/>
                 </StackPanel>
             </StackPanel>
 

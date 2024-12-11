@@ -271,6 +271,11 @@ namespace TravailSessionProg2024
             Ouverture();
             return liste_activites;
         }
+        public ObservableCollection<Séance> Getliste_Séances()
+        {
+            Ouverture();
+            return liste_seances;
+        }
 
         public ObservableCollection<Séance> getListeSéancesSelonActivité(string nomActivité)
         {
@@ -345,6 +350,15 @@ namespace TravailSessionProg2024
         {
             return adhérent_connecter;
         }
+        public string getAdhérentSelonID(int id)
+        {
+            foreach(Adhérent obj in liste_user)
+            {
+                if (id == obj.ID)
+                    return obj.CodeAdherent;
+            }
+            return "";
+        }
 
 
         //AJOUTER
@@ -393,7 +407,7 @@ namespace TravailSessionProg2024
             return false;
         }
 
-        public void BD_Ajouter(Adhérent ad)
+        public int BD_Ajouter(Adhérent ad)
         {
             try
             {
@@ -408,10 +422,12 @@ namespace TravailSessionProg2024
 
                 con.Open();
                 commande.Prepare();
-                int i = commande.ExecuteNonQuery();
+                var resultat = commande.ExecuteScalar();
+                Debug.WriteLine(resultat);
 
                 con.Close();
-                ajouter(ad);
+                Ouverture();
+                return (int)resultat;
             }
             catch (Exception ex)
             {
@@ -421,6 +437,7 @@ namespace TravailSessionProg2024
                     con.Close();
                 }
             }
+            return -1;
         }
         public void BD_Ajouter(Activité ac)
         {
@@ -826,9 +843,9 @@ namespace TravailSessionProg2024
 
 
 
-        public ObservableCollection<Activité> BD_ActiviteUserParticipate()
+        public ObservableCollection<Activité_Évaluation> BD_ActiviteUserParticipate()
         {
-            ObservableCollection<Activité> list = new ObservableCollection<Activité>();
+            ObservableCollection<Activité_Évaluation> list = new ObservableCollection<Activité_Évaluation>();
 
             try
             {
@@ -842,11 +859,46 @@ namespace TravailSessionProg2024
                 {
                     string nom = r["Nom"].ToString();
                     string type = r["Type"].ToString();
-                    double coutOrganisation = double.Parse(r["CoutOrganisation"].ToString());
-                    double prixVenteParClient = double.Parse(r["PrixVenteParClient"].ToString());
                     int id = int.Parse(r["ID"].ToString());
 
-                    list.Add(new Activité(id, nom, type, coutOrganisation, prixVenteParClient));
+                    list.Add(new Activité_Évaluation(id, nom, type));
+                }
+
+                r.Close();
+                con.Close();
+            }
+            catch (Exception ex)
+            {
+                if (con.State == System.Data.ConnectionState.Open)
+                {
+                    con.Close();
+                }
+                Debug.WriteLine(ex.Message);
+            }
+
+            return list;
+        }
+        public ObservableCollection<string> BD_NoteParActivitéUser(int idActivite)
+        {
+            ObservableCollection<string> list = new ObservableCollection<string>();
+
+            try
+            {
+                MySqlCommand commande = new MySqlCommand();
+                commande.Connection = con;
+                commande.CommandText = $"select * from evaluations where idActivite = \"{idActivite}\" and idAdherent in (select id from adherents where CodeAdherent = \"{adhérent_connecter.CodeAdherent}\")";
+                con.Open();
+                MySqlDataReader r = commande.ExecuteReader();
+
+                while (r.Read())
+                {
+                    string commentaire = r["Commentaire"].ToString();
+                    double note = double.Parse(r["Note"].ToString());
+                    int id = int.Parse(r["ID"].ToString());
+
+                    list.Add(id+"");
+                    list.Add(note+"");
+                    list.Add(commentaire);
                 }
 
                 r.Close();
@@ -864,7 +916,297 @@ namespace TravailSessionProg2024
             return list;
         }
 
+        public void BD_AjouterEvaluation(int idActivite, double note, string commentaire)
+        {
+            try
+            {
+                if (note < 0)
+                {
+                    note = 0;
+                }
+                if (note >= 10)
+                {
+                    note = 9.99;
+                }
+                if (string.IsNullOrEmpty(commentaire))
+                {
+                    commentaire = "null";
+                }
+                MySqlCommand commande = new MySqlCommand();
+                commande.Connection = con;
+                commande.CommandText = $"insert evaluations (idAdherent, idActivite, Note, Commentaire) VALUES (\"{adhérent_connecter.ID}\", \"{idActivite}\", replace(\"{note}\",',','.'), \"{commentaire}\")";
+                con.Open();
+                commande.ExecuteNonQuery();
+
+                con.Close();
+      
+            }
+            catch (Exception ex)
+            {
+                if (con.State == System.Data.ConnectionState.Open)
+                {
+                    con.Close();
+                }
+                Debug.WriteLine(ex.Message);
+            }
+
+        }
+
+        public void BD_ModifierEvaluation(int idEval, double note, string commentaire)
+        {
+            try
+            {
+                if (note < 0)
+                {
+                    note = 0;
+                }
+                if (note >= 10)
+                {
+                    note = 9.9;
+                }
+                if (string.IsNullOrEmpty(commentaire))
+                {
+                    commentaire = "null";
+                }
+                MySqlCommand commande = new MySqlCommand();
+                commande.Connection = con;
+                commande.CommandText = $"UPDATE evaluations t SET t.Commentaire = \"{commentaire}\", t.Note = replace(\"{note}\",',','.') WHERE t.ID = {idEval};";
+
+                con.Open();
+                commande.ExecuteNonQuery();
+
+                con.Close();
+
+            }
+            catch (Exception ex)
+            {
+                if (con.State == System.Data.ConnectionState.Open)
+                {
+                    con.Close();
+                }
+                Debug.WriteLine(ex.Message);
+            }
+
+        }
+
+        public void BD_AjouterActivité(string nom, string type, double cout, double prix)
+        {
+            try
+            {
+                MySqlCommand commande = new MySqlCommand("CreerActivite");
+                commande.Connection = con;
+                commande.CommandType = System.Data.CommandType.StoredProcedure;
+                commande.Parameters.AddWithValue("nomActivite", $"{nom}");
+                commande.Parameters.AddWithValue("typeActivite", $"{type}");
+                commande.Parameters.AddWithValue("coutOrganisation", $"{cout}");
+                commande.Parameters.AddWithValue("prixVenteParClient", $"{prix}");
+                commande.Parameters.AddWithValue("dateHeureSeance", $"{DateTime.UtcNow}");
+                commande.Parameters.AddWithValue("nombrePlaces", $"{0}");
 
 
+                con.Open();
+                commande.Prepare();
+                int i = commande.ExecuteNonQuery();
+
+                con.Close();
+
+            }
+            catch (Exception ex)
+            {
+                if (con.State == System.Data.ConnectionState.Open)
+                {
+                    con.Close();
+                }
+                Debug.WriteLine(ex.Message);
+            }
+
+        }
+
+
+        public void BD_ModifierAdherent(string codeAdherent, string nom, string prenom, string adresse, DateOnly datenaissance, string motdepasse)
+        {
+            try
+            {
+                MySqlCommand commande = new MySqlCommand("ModifierAdherentParCode");
+                commande.Connection = con;
+                commande.CommandType = System.Data.CommandType.StoredProcedure;
+                commande.Parameters.AddWithValue("p_CodeAdherent", $"{codeAdherent}");
+                commande.Parameters.AddWithValue("p_Nom", $"{nom}");
+                commande.Parameters.AddWithValue("p_Prenom", $"{prenom}");
+                commande.Parameters.AddWithValue("p_Adresse", $"{adresse}");
+                commande.Parameters.AddWithValue("p_DateNaissance", $"{datenaissance}");
+                commande.Parameters.AddWithValue("p_MotDePasse", $"{motdepasse}");
+
+
+                con.Open();
+                commande.Prepare();
+                int i = commande.ExecuteNonQuery();
+
+                con.Close();
+
+            }
+            catch (Exception ex)
+            {
+                if (con.State == System.Data.ConnectionState.Open)
+                {
+                    con.Close();
+                }
+                Debug.WriteLine(ex.Message);
+            }
+
+        }
+
+
+        public void BD_ModifierActivité(string nom, string newName, string type, double cout, double prix)
+        {
+            try
+            {
+                MySqlCommand commande = new MySqlCommand("ModifierActiviteParNom");
+                commande.Connection = con;
+                commande.CommandType = System.Data.CommandType.StoredProcedure;
+                commande.Parameters.AddWithValue("p_NomActivite", $"{nom}");
+                commande.Parameters.AddWithValue("p_NouveauNom", $"{newName}");
+                commande.Parameters.AddWithValue("p_Type", $"{type}");
+                commande.Parameters.AddWithValue("p_CoutOrganisation", $"{cout}");
+                commande.Parameters.AddWithValue("p_PrixVenteParClient", $"{prix}");
+                
+
+
+                con.Open();
+                commande.Prepare();
+                int i = commande.ExecuteNonQuery();
+
+                con.Close();
+
+            }
+            catch (Exception ex)
+            {
+                if (con.State == System.Data.ConnectionState.Open)
+                {
+                    con.Close();
+                }
+                Debug.WriteLine(ex.Message);
+            }
+
+        }
+
+
+        public void BD_SuppriméActivité(string nomActivité)
+        {
+            try
+            {
+                MySqlCommand commande = new MySqlCommand("SupprimerActivite");
+                commande.Connection = con;
+                commande.CommandType = System.Data.CommandType.StoredProcedure;
+                commande.Parameters.AddWithValue("nomActivite", $"{nomActivité}");
+
+
+
+                con.Open();
+                commande.Prepare();
+                int i = commande.ExecuteNonQuery();
+
+                con.Close();
+
+            }
+            catch (Exception ex)
+            {
+                if (con.State == System.Data.ConnectionState.Open)
+                {
+                    con.Close();
+                }
+                Debug.WriteLine(ex.Message);
+            }
+
+        }
+
+        public void BD_AjouterSéance(int id, DateTime dt, int nbPlaces)
+        {
+            try
+            {
+                MySqlCommand commande = new MySqlCommand("CreerSeance");
+                commande.Connection = con;
+                commande.CommandType = System.Data.CommandType.StoredProcedure;
+                commande.Parameters.AddWithValue("p_idActivite", $"{id}");
+                commande.Parameters.AddWithValue("p_DateHeure", $"{dt}");
+                commande.Parameters.AddWithValue("p_NombrePlaces", $"{nbPlaces}");
+
+                con.Open();
+                commande.Prepare();
+                int i = commande.ExecuteNonQuery();
+
+                con.Close();
+
+            }
+            catch (Exception ex)
+            {
+                if (con.State == System.Data.ConnectionState.Open)
+                {
+                    con.Close();
+                }
+                Debug.WriteLine(ex.Message);
+            }
+
+        }
+
+        public void BD_SuppriméSéance(int id)
+        {
+            try
+            {
+                MySqlCommand commande = new MySqlCommand("SupprimerSeance");
+                commande.Connection = con;
+                commande.CommandType = System.Data.CommandType.StoredProcedure;
+                commande.Parameters.AddWithValue("p_idSeance", $"{id}");
+
+
+
+                con.Open();
+                commande.Prepare();
+                int i = commande.ExecuteNonQuery();
+
+                con.Close();
+
+            }
+            catch (Exception ex)
+            {
+                if (con.State == System.Data.ConnectionState.Open)
+                {
+                    con.Close();
+                }
+                Debug.WriteLine(ex.Message);
+            }
+
+        }
+
+        public void BD_ModifiéSéance(int id, DateTime dt, int nbplaces)
+        {
+            try
+            {
+                MySqlCommand commande = new MySqlCommand("ModifierSeance");
+                commande.Connection = con;
+                commande.CommandType = System.Data.CommandType.StoredProcedure;
+                commande.Parameters.AddWithValue("p_idSeance", $"{id}");
+                commande.Parameters.AddWithValue("p_DateHeure", $"{dt}");
+                commande.Parameters.AddWithValue("p_NombrePlaces", $"{nbplaces}");
+
+
+
+                con.Open();
+                commande.Prepare();
+                int i = commande.ExecuteNonQuery();
+
+                con.Close();
+
+            }
+            catch (Exception ex)
+            {
+                if (con.State == System.Data.ConnectionState.Open)
+                {
+                    con.Close();
+                }
+                Debug.WriteLine(ex.Message);
+            }
+
+        }
     }
 }

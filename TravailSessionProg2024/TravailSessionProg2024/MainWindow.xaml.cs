@@ -100,6 +100,7 @@ namespace TravailSessionProg2024
             {
                 foreach (NavigationViewItem nvi in liste)
                 {
+                    if (!string.Equals(nvi.Tag, "Notes"))
                     nvi.Visibility = Visibility.Visible;
                 }
             }
@@ -107,10 +108,15 @@ namespace TravailSessionProg2024
             {
                 foreach (NavigationViewItem nvi in liste)
                 {
-                    if (string.Equals(nvi.Tag, "Admin")){
+                    if (string.Equals(nvi.Tag, "Admin") || string.Equals(nvi.Tag, "Notes"))
+                    {
                         nvi.Visibility = Visibility.Collapsed;
                     }
-                    
+                    if (string.Equals(nvi.Tag, "Notes") && Singleton.getInstance().getNiveauPermission() == 1)
+                    {
+                        nvi.Visibility = Visibility.Visible;
+                    }
+
                 }
             }
             changementNomConnexion();
