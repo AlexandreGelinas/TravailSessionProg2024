@@ -7,11 +7,11 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
-
-    <NavigationView x:Name="nvSample" IsSettingsVisible="False" IsBackButtonVisible="Collapsed" Loaded="nvSample_Loaded" SelectionChanged="nvSample_SelectionChanged">
+   
+        <NavigationView x:Name="nvSample" IsSettingsVisible="False" IsBackButtonVisible="Collapsed" Loaded="nvSample_Loaded" SelectionChanged="nvSample_SelectionChanged">
         <NavigationView.MenuItems>
             <NavigationViewItem Icon="Play" Content="Activités" Tag="Activites" />
-            <NavigationViewItem Icon="SolidStar" Content="Notes" Tag="Notes" />
+            <NavigationViewItem Icon="SolidStar" Content="Notes" Tag="Notes" Visibility="Collapsed"/>
         </NavigationView.MenuItems>
         <NavigationView.FooterMenuItems>
             <NavigationViewItem Content="Connexion" Tag="Connexion" Icon="Contact" /> <!--Le content va déprendre du niveau de permission, 0=Déco, 1=Adherent, 2=Admin-->
@@ -22,4 +22,5 @@
 
         <Frame x:Name="contentFrame"/>
     </NavigationView>
+   
 </Window>

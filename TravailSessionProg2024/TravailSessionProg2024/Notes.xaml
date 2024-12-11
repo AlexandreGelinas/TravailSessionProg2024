@@ -48,9 +48,9 @@
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal" Margin="5">
-                        <TextBlock Text="{Binding Nom}" Width="250" Margin="5"/>
+                        <TextBlock Text="{Binding NomActivité}" Width="250" Margin="5"/>
                         <TextBlock Text="{Binding Note}" Width="250" Margin="5"/>
-                        <TextBlock Text="{Binding Commentaire}" Width="250" Margin="5"/>
+                        <TextBlock Text="{Binding Commentaire}" TextWrapping="Wrap" Width="250" Margin="5"/>
                     </StackPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>
@@ -58,13 +58,14 @@
 
         <!-- Boutons pour ajouter une note à une activité -->
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
-            <Button Content="Noter une activité"
-            Width="150"
+            <Button Content="Noter / Modifié une activité"
+            Width="200"
             Height="40"
             Margin="5"
             Click="Button_Noter"
             Background="Green"
-            Foreground="White"/>
+            Foreground="White"
+            />
         </StackPanel>
 
     </StackPanel>

@@ -826,9 +826,9 @@ namespace TravailSessionProg2024
 
 
 
-        public ObservableCollection<Activité> BD_ActiviteUserParticipate()
+        public ObservableCollection<Activité_Évaluation> BD_ActiviteUserParticipate()
         {
-            ObservableCollection<Activité> list = new ObservableCollection<Activité>();
+            ObservableCollection<Activité_Évaluation> list = new ObservableCollection<Activité_Évaluation>();
 
             try
             {
@@ -842,11 +842,9 @@ namespace TravailSessionProg2024
                 {
                     string nom = r["Nom"].ToString();
                     string type = r["Type"].ToString();
-                    double coutOrganisation = double.Parse(r["CoutOrganisation"].ToString());
-                    double prixVenteParClient = double.Parse(r["PrixVenteParClient"].ToString());
                     int id = int.Parse(r["ID"].ToString());
 
-                    list.Add(new Activité(id, nom, type, coutOrganisation, prixVenteParClient));
+                    list.Add(new Activité_Évaluation(id, nom, type));
                 }
 
                 r.Close();
@@ -863,27 +861,27 @@ namespace TravailSessionProg2024
 
             return list;
         }
-        public ObservableCollection<Activité> BD_NoteParActivitéUser()
+        public ObservableCollection<string> BD_NoteParActivitéUser(int idActivite)
         {
-            ObservableCollection<Activité> list = new ObservableCollection<Activité>();
+            ObservableCollection<string> list = new ObservableCollection<string>();
 
             try
             {
                 MySqlCommand commande = new MySqlCommand();
                 commande.Connection = con;
-                commande.CommandText = $"select * from evaluations where idActivite = 1 and idAdherent in (select id from adherents where CodeAdherent = \"\")\r\n";
+                commande.CommandText = $"select * from evaluations where idActivite = \"{idActivite}\" and idAdherent in (select id from adherents where CodeAdherent = \"{adhérent_connecter.CodeAdherent}\")";
                 con.Open();
                 MySqlDataReader r = commande.ExecuteReader();
 
                 while (r.Read())
                 {
-                    string nom = r["Nom"].ToString();
-                    string type = r["Type"].ToString();
-                    double coutOrganisation = double.Parse(r["CoutOrganisation"].ToString());
-                    double prixVenteParClient = double.Parse(r["PrixVenteParClient"].ToString());
+                    string commentaire = r["Commentaire"].ToString();
+                    double note = double.Parse(r["Note"].ToString());
                     int id = int.Parse(r["ID"].ToString());
 
-                    list.Add(new Activité(id, nom, type, coutOrganisation, prixVenteParClient));
+                    list.Add(id+"");
+                    list.Add(note+"");
+                    list.Add(commentaire);
                 }
 
                 r.Close();
@@ -899,6 +897,79 @@ namespace TravailSessionProg2024
             }
 
             return list;
+        }
+
+        public void BD_AjouterEvaluation(int idActivite, double note, string commentaire)
+        {
+            try
+            {
+                if (note < 0)
+                {
+                    note = 0;
+                }
+                if (note >= 10)
+                {
+                    note = 9.99;
+                }
+                if (string.IsNullOrEmpty(commentaire))
+                {
+                    commentaire = "null";
+                }
+                MySqlCommand commande = new MySqlCommand();
+                commande.Connection = con;
+                commande.CommandText = $"insert evaluations (idAdherent, idActivite, Note, Commentaire) VALUES (\"{adhérent_connecter.ID}\", \"{idActivite}\", replace(\"{note}\",',','.'), \"{commentaire}\")";
+                con.Open();
+                commande.ExecuteNonQuery();
+
+                con.Close();
+      
+            }
+            catch (Exception ex)
+            {
+                if (con.State == System.Data.ConnectionState.Open)
+                {
+                    con.Close();
+                }
+                Debug.WriteLine(ex.Message);
+            }
+
+        }
+
+        public void BD_ModifierEvaluation(int idEval, double note, string commentaire)
+        {
+            try
+            {
+                if (note < 0)
+                {
+                    note = 0;
+                }
+                if (note >= 10)
+                {
+                    note = 9.9;
+                }
+                if (string.IsNullOrEmpty(commentaire))
+                {
+                    commentaire = "null";
+                }
+                MySqlCommand commande = new MySqlCommand();
+                commande.Connection = con;
+                commande.CommandText = $"UPDATE evaluations t SET t.Commentaire = \"{commentaire}\", t.Note = replace(\"{note}\",',','.') WHERE t.ID = {idEval};";
+
+                con.Open();
+                commande.ExecuteNonQuery();
+
+                con.Close();
+
+            }
+            catch (Exception ex)
+            {
+                if (con.State == System.Data.ConnectionState.Open)
+                {
+                    con.Close();
+                }
+                Debug.WriteLine(ex.Message);
+            }
+
         }
 
 
